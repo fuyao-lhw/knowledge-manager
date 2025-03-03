@@ -10,6 +10,12 @@ encoding:   -*- coding: utf-8 -*-
 实现步骤
 
 """
-from flask import Blueprint
+from flask import Blueprint, request
+from perKnowManage.config import logger
 
 bp = Blueprint("documents", __name__)
+
+@bp.route("/documents", methods=["POST", "GET"])
+def documents():
+    if request.method == "POST":
+        logger.info("上传文件")

@@ -57,7 +57,7 @@ CREATE TABLE documents (
     file_path VARCHAR(500) NOT NULL,  -- 文件存储路径
     file_type VARCHAR(10) NOT NULL,   -- pdf/docx/txt等
     user_id INT NOT NULL,
-    upload_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FULLTEXT INDEX ft_content (title, content),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -83,14 +83,14 @@ CREATE TABLE documents (
 ```sql
 CREATE TABLE tags (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(50) NOT NULL,
     created_by INT NOT NULL,
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
 ```
 
 - **id**：主键，唯一标识标签，自增整数。
-- **name**：标签名称（如 `技术`、`会议记录`），需唯一且不可为空。
+- **name**：标签名称（如 `技术`、`会议记录`），同一用户不可重复且不可为空。
 - **created_by**：外键关联 `users.id`，标识标签的创建者，实现多用户标签隔离。
 
 **索引与外键**：
@@ -192,7 +192,7 @@ CREATE TABLE relationships (
 {
 	"status": boolean,
 	"message": string,
-	"data": string/json/dict/int...,
+	"data": string/json/dict/int...,  # 非必要
 }
 ```
 
@@ -226,12 +226,14 @@ Backend
 			documents.py
 			permission.py
 			tags.py
+		utils
 ```
 
-- app.py : 主应用文件(运行文件)
-- config.py : 配置文件(数据库配置...)
-- Models : 数据库模型文件(关系映射)
-- Apis : RESTful API设计
+- **app.py** : 主应用文件(运行文件)
+- **config.py** : 配置文件(数据库配置...)
+- **Models** : 数据库模型文件(关系映射)
+- **Apis** : RESTful API设计
+- **utils**：功能函数
 
 ### 设置flask应用
 
@@ -258,13 +260,13 @@ flask run
 
 或直接运行``app.py``
 
-### 数据库定义
+### 数据库映射
 
 为了灵活的实现与数据库的连接,这里使用``flask_sqlalchemy``将MySQL数据库和flask进行抽象的关系映射
 
 > 具体的数据库定义在``models.py``
 
-### 
+
 
 ## 前端设计
 

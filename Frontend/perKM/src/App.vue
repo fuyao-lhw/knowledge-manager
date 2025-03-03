@@ -20,10 +20,12 @@
 .main-container {
   position: relative;
   height: 100vh;
+  width: 100%;
   min-height: 100vh;
   overflow: hidden;
   background: linear-gradient(to bottom right, #000428 0%, #004e92 100%);
 }
+
 
 /* 内容样式 */
 .content {
