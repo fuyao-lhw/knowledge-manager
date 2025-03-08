@@ -1,6 +1,5 @@
 <template>
   <div class="index-page">
-    
     <el-container class="main-container">
       <!-- 侧边导航 -->
       <el-aside class="navigator">
@@ -8,7 +7,6 @@
           active-text-color="#409EFF"
           background-color="#1a1a1a"
           text-color="#fff"
-          
         >
           <el-menu-item index="/dashboard">
             <template #title>
@@ -22,12 +20,12 @@
               <span>知识库管理</span>
             </template>
             <el-menu-item index="/knowledge/list">所有知识库</el-menu-item>
-            <el-menu-item index="/knowledge/new">新建知识库</el-menu-item>
+            <!-- <el-menu-item index="/knowledge/new">新建知识库</el-menu-item> -->
           </el-sub-menu>
           <el-menu-item index="/recent">
             <template #title>
               <el-icon><Clock /></el-icon>
-              <span>最近更新</span>
+              <span>所有文档</span>
             </template>
           </el-menu-item>
         </el-menu>
@@ -62,25 +60,22 @@
               :key="index"
               :timestamp="update.time"
             >
-              {{ update.content }}
+              {{ update.title }}
             </el-timeline-item>
           </el-timeline>
         </el-card>
+
+        <!-- <el-button @click="get_document_list">请求文档</el-button> -->
       </el-main>
     </el-container>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import {
-  House,
-  Files,
-  Clock,
-} from "@element-plus/icons-vue";
-import UserInfo from "@/components/User/UserInfo.vue";
-import { Expand, Fold } from "@element-plus/icons-vue";
-import type { UploadInstance } from "element-plus";
+import { onMounted, ref } from "vue";
+import { House, Files, Clock } from "@element-plus/icons-vue";
+import "@/components/User/UserInfo.vue";
+import axios from "axios";
 
 const navVisible = ref(false);
 
@@ -90,28 +85,34 @@ const toggleNav = () => {
 };
 const searchKey = ref("");
 
+
+
+
+// Python,HTML,CSS,JacaScript,Java,Vue,C#,开发
 const statsData = ref([
   { title: "知识库库总数", value: 0 },
-  { title: "文档库总数", value: 245 },
-  { title: "文档总量", value: 12890 },
-  { title: "本周新增", value: 142 },
-  { title: "文档上传成员", value: 38 },
+  { title: "文档库总数", value: 8 },
+  { title: "文档总量", value: 21 },
+  { title: "本周新增", value: 1 },
+  { title: "文档上传成员", value: 2 },
 ]);
 
-const updates = ref([
-  {
-    time: "2024-02-15 14:00",
-    content: "技术文档中心 - 更新API接口规范文档",
-  },
-  {
-    time: "2024-02-14 16:30",
-    content: "产品手册 - 新增功能模块说明",
-  },
-  {
-    time: "2024-02-13 09:45",
-    content: "项目规范 - 修订代码提交规范",
-  },
-]);
+const updates = ref([]);
+
+async function get_document_list() {
+  const response = await axios.get("/api/documents?form=latest");
+  console.log(response.data);
+  for (let i=0; i<response.data.data.length; i++){
+    updates.value.push({
+      title: response.data.data[i].name.split(".")[0],
+      time: response.data.data[i].upload_time,
+    });
+  }
+}
+
+onMounted(()=>{
+  get_document_list();
+})
 
 </script>
 

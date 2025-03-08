@@ -223,8 +223,9 @@ Backend
 		Models
 			models.py
 		Apis
-			documents.py
-			permission.py
+			identity.py  登录/注册
+			documents.py  文档
+			permission.py  
 			tags.py
 		utils
 ```
@@ -304,3 +305,24 @@ src
 
 ![image-20250226235501225](images/README/image-20250226235501225.png)
 
+## 功能设计
+
+### 登录/注册
+
+
+
+### 文档上传
+
+
+
+### 文档列表
+
+
+
+### 全文搜索
+
+
+
+### 知识图谱(?)
+
+考虑中,由于电脑配置和存储问题,neo4j图数据库无法配置,NLP等图神经网络实现困难

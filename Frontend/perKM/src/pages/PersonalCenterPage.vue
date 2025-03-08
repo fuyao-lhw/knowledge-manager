@@ -21,7 +21,12 @@
     <el-card title="上传文件">
       <template #header>上传文件</template>
       <p class="one">
-        <el-upload>
+        <el-upload
+        accept="md,txt,html"
+        action="/api/documents"
+        method="POST"
+        :auto-upload="false"
+        >
           <template #tip>
             <div class="el-upload__tip">
                 暂时只支持.md/.txt/.html文件;大小不超过5mb
