@@ -31,11 +31,15 @@ def create_app():
     # 跨域
     CORS(app, resources={r'/*': {'origins': '*'}}, supports_credentials=True)
 
-    from perKnowManage.Apis import identity
     url_prefix = "/api"
 
     # 登录注册功能
+    from perKnowManage.Apis import identity
     app.register_blueprint(blueprint=identity.bp, url_prefix=url_prefix)
+
+    # 文档功能
+    from perKnowManage.Apis import documents
+    app.register_blueprint(blueprint=documents.bp, url_prefix=url_prefix)
 
     return app
 

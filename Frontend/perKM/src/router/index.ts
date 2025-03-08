@@ -27,6 +27,10 @@ const router = createRouter({
             component: () => import('@/pages/IndexPage.vue')
         },
         {
+            path: '/personal',
+            component: () => import('@/pages/PersonalCenterPage.vue')
+        },
+        {
             path: '/test',
             component: () => import('@/pages/TestPage.vue')
         },

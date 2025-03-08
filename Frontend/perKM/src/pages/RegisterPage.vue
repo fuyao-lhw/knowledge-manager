@@ -64,6 +64,9 @@ const post_register = async function(){
   border: 2px solid;
   height: 600px;
   width: 500px;
+  background: #fff;
+  position: relative;
+  left: 25%;
 }
 .isLogin h1 {
   font-size: 50px;

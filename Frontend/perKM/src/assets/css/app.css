@@ -7,5 +7,5 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden; /* 防止滚动条导致白边 */
+  /* overflow: hidden; 防止滚动条导致白边 */
 }

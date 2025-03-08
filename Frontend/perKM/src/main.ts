@@ -15,3 +15,11 @@ app.use(pinia);
 app.mount('#app');
 
 // createApp(App).mount('#app')
+
+const cvs = document.getElementById('stroke');
+function init(){
+    cvs.width = window.innerWidth;
+    cvs.height = window.innerHeight;
+}
+
+init();

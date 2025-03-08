@@ -1,38 +1,6 @@
 <template>
   <div class="index-page">
-    <!-- 顶部导航栏 -->
-    <el-header class="header">
-      <el-icon class="menu-toggle" @click="toggleNav">
-        <Expand v-if="navVisible" />
-        <Fold v-else />
-      </el-icon>
-      <div class="header-content">
-        <!-- 左侧系统名称 -->
-        <el-link :underline="false" class="logo" type="primary" href="/index">
-          <span class="system-name">扶摇知识管理系统</span>
-        </el-link>
-
-        <!-- 中间搜索框 -->
-        <div class="search-container">
-          <el-input
-            v-model="searchKey"
-            placeholder="全站搜索"
-            class="search-input"
-            clearable
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
-        </div>
-
-        <!-- 右侧用户信息 -->
-        <div class="header-right">
-          <user-info />
-        </div>
-      </div>
-    </el-header>
-
+    
     <el-container class="main-container">
       <!-- 侧边导航 -->
       <el-aside class="navigator">
@@ -40,7 +8,7 @@
           active-text-color="#409EFF"
           background-color="#1a1a1a"
           text-color="#fff"
-          router
+          
         >
           <el-menu-item index="/dashboard">
             <template #title>
@@ -81,25 +49,6 @@
           </el-row>
         </div>
 
-        <!-- 快捷操作 -->
-        <el-card class="quick-actions">
-          <template #header>
-            <div class="card-header">
-              <span>快捷操作</span>
-            </div>
-          </template>
-          <el-space wrap>
-            <el-upload>
-              <el-button type="primary" :icon="Plus">新建知识库</el-button>
-              <el-button type="success" :icon="Upload">批量导入</el-button>
-              <!-- <el-button type="info" :icon="Download">导出数据</el-button> -->
-            </el-upload>
-            <!-- <el-button type="primary" :icon="Plus">新建知识库</el-button> -->
-            <!-- <el-button type="success" :icon="Upload">批量导入</el-button> -->
-            <el-button type="info" :icon="Download">导出数据</el-button>
-          </el-space>
-        </el-card>
-
         <!-- 最近更新 -->
         <el-card class="recent-updates">
           <template #header>
@@ -119,34 +68,6 @@
         </el-card>
       </el-main>
     </el-container>
-    <el-footer class="system-footer">
-      <div class="footer-content">
-        <el-row :gutter="20">
-          <el-col :md="8" :sm="24">
-            <div class="footer-section">
-              <el-link :underline="false"><h4>关于我们</h4></el-link>
-              <p>提倡知识共享</p>
-              <p>© 2024 扶摇知识管理系统</p>
-            </div>
-          </el-col>
-          <el-col :md="8" :sm="24">
-            <div class="footer-section">
-              <h4>联系方式</h4>
-              <p>邮箱：1959415641@fyao.com</p>
-              <p>电话：***********</p>
-            </div>
-          </el-col>
-          <el-col :md="8" :sm="24">
-            <div class="footer-section">
-              <h4>快速链接</h4>
-              <el-link type="info">用户协议</el-link>
-              <el-link type="info">隐私政策</el-link>
-              <el-link type="info">帮助中心</el-link>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
-    </el-footer>
   </div>
 </template>
 
@@ -156,13 +77,10 @@ import {
   House,
   Files,
   Clock,
-  Search,
-  Plus,
-  Upload,
-  Download,
 } from "@element-plus/icons-vue";
-import UserInfo from "@/components/UserInfo.vue";
+import UserInfo from "@/components/User/UserInfo.vue";
 import { Expand, Fold } from "@element-plus/icons-vue";
+import type { UploadInstance } from "element-plus";
 
 const navVisible = ref(false);
 
@@ -194,6 +112,7 @@ const updates = ref([
     content: "项目规范 - 修订代码提交规范",
   },
 ]);
+
 </script>
 
 <style scoped>
