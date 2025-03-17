@@ -12,7 +12,7 @@ encoding:   -*- coding: utf-8 -*-
 """
 from flask import Blueprint, request, jsonify
 from perKnowManage.config import logger, data_save_type, FILE_FOLDER
-from perKnowManage.utils.get_documents_list import DocumentList
+from perKnowManage.utils.documents import DocumentList, DocumentsInfo
 import os
 
 bp = Blueprint("documents", __name__)
@@ -63,6 +63,21 @@ def documents():
         })
 
 
+@bp.route("/stats", methods=["GET", "POST"])
+def stats():
+    if request.method == "GET":
+        logger.info("读取数据展示信息")
+        documents_info = DocumentsInfo()
+        result = []
+        # 数据库
+        if data_save_type == 0:
+            result = documents_info.db_info()
+        # 本地
+        if data_save_type == 1:
+            result = documents_info.folder_info()
 
-
-
+        return jsonify({
+            "status": True,
+            "message": "获取成功",
+            "data": result
+        })

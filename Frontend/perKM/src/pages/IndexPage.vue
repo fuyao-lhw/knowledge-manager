@@ -89,19 +89,19 @@ const searchKey = ref("");
 
 
 // Python,HTML,CSS,JacaScript,Java,Vue,C#,开发
-const statsData = ref([
-  { title: "知识库库总数", value: 0 },
-  { title: "文档库总数", value: 8 },
-  { title: "文档总量", value: 21 },
-  { title: "本周新增", value: 1 },
-  { title: "文档上传成员", value: 2 },
-]);
+const statsData = ref([]);
+
+async function get_stats() {
+  const response = await axios.get("/api/stats");
+  console.log("数据展示", response.data)
+  statsData.value = response.data.data;
+}
 
 const updates = ref([]);
 
 async function get_document_list() {
   const response = await axios.get("/api/documents?form=latest");
-  console.log(response.data);
+  console.log("最近更新" ,response.data);
   for (let i=0; i<response.data.data.length; i++){
     updates.value.push({
       title: response.data.data[i].name.split(".")[0],
@@ -111,6 +111,7 @@ async function get_document_list() {
 }
 
 onMounted(()=>{
+  get_stats();
   get_document_list();
 })
 
