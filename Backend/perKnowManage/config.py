@@ -29,6 +29,6 @@ verify_code_temp = ""
 0:数据库存储
 1:本地文件路径存储
 """
-data_save_type = 1
+data_save_type = 0
 # 本地文件存储路径
 FILE_FOLDER = r"D:\code\All_Learning\MarkdownNotes"

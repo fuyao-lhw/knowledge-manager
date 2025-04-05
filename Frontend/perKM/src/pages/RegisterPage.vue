@@ -38,7 +38,7 @@ const data = reactive({
 // 提交申请
 async function send_code() {
     console.log('发送验证码申请...')
-    const response = await axios.post("/api/register/verify_code", {email: data.email});
+    const response = await axios.post("/api/verify_code", {email: data.email});
     console.log(response.data)
 }
 
@@ -48,9 +48,9 @@ const post_register = async function(){
   console.log(data);
   const response = await postRegister(data);
   console.log(response);
-  if (response.status === true){
+  if (response.status === 200){
     localStorage.setItem("user", data.email);
-    router.push("/")
+    location.href = "/";
   } else if (response.status === false){
     alert(response.message);
   }

@@ -48,9 +48,9 @@ const post_login = async function () {
   console.log(data);
   const response = await postLogin(data);
   console.log(response);
-  if (response.status === true) {
+  if (response.status === 200) {
     localStorage.setItem("user", data.email);
-    router.push("/");
+    location.href = "/";
   } else if (response.status === false) {
     alert(response.message);
   }
@@ -63,11 +63,12 @@ const post_login = async function () {
   border: 2px solid;
   height: 500px;
   width: 500px;
-  /* color: white; */
   background: #fff;
   position: relative;
   left: 25%;
 }
+
+
 .isLogin h1 {
   font-size: 50px;
   text-align: center;

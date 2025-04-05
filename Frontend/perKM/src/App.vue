@@ -1,7 +1,5 @@
 <template>
-  <div></div>
   <div class="index-page">
-
     <!-- canvas层 -->
     <canvas ref="canvasRef" class="background-canvas"></canvas>
 
@@ -14,7 +12,10 @@
       <div class="header-content">
         <!-- 左侧系统名称 -->
         <el-link :underline="false" class="logo" type="primary" href="/index">
-          <span class="system-name">扶摇知识管理系统</span>
+          <span class="system-name">
+            <el-icon class="system-icon"><Promotion /></el-icon
+            >扶摇知识管理系统</span
+          >
         </el-link>
 
         <!-- 中间搜索框 -->
@@ -32,7 +33,7 @@
         </div>
         <!-- 右侧用户信息 -->
         <div class="header-right">
-          <user-info />
+          <user-setting />
         </div>
       </div>
     </el-header>
@@ -45,8 +46,8 @@
             <div class="footer-section">
               <h4>关于我们</h4>
               <p>
-                扶摇团队<br>
-                提倡知识共享<br>
+                扶摇团队<br />
+                提倡知识共享<br />
                 © 2025 扶摇知识管理系统
               </p>
             </div>
@@ -55,9 +56,11 @@
             <div class="footer-section">
               <h4>联系方式</h4>
               <p>
-                邮箱：1959415641@qq.com<br>
-                电话：***********<br>
-                <el-link href="https://gitee.com/luo_hw" :underline="false">Gitee</el-link>
+                邮箱：1959415641@qq.com<br />
+                电话：***********<br />
+                <el-link href="https://gitee.com/luo_hw" :underline="false"
+                  >Gitee</el-link
+                >
               </p>
             </div>
           </el-col>
@@ -65,8 +68,8 @@
             <div class="footer-section">
               <h4>快速链接</h4>
               <p>
-                <el-link type="info" :underline="false">用户协议</el-link><br>
-                <el-link type="info" :underline="false">隐私政策</el-link><br>
+                <el-link type="info" :underline="false">用户协议</el-link><br />
+                <el-link type="info" :underline="false">隐私政策</el-link><br />
                 <el-link type="info" :underline="false">帮助中心</el-link>
               </p>
             </div>
@@ -78,70 +81,67 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  Search,
-} from "@element-plus/icons-vue";
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import UserInfo from "./components/User/UserInfo.vue";
+import { Search } from "@element-plus/icons-vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import UserSetting from "./components/User/UserSetting.vue";
 
 const searchKey = ref("");
 
-const canvasRef = ref<HTMLCanvasElement>()
+const canvasRef = ref<HTMLCanvasElement>();
 
 // Canvas初始化
 const initCanvas = () => {
-  const canvas = canvasRef.value!
-  const ctx = canvas.getContext('2d')!
+  const canvas = canvasRef.value!;
+  const ctx = canvas.getContext("2d")!;
   // 在initCanvas中添加
   // canvas.style.willChange = 'contents' // 启用GPU加速
-  
+
   // 设置画布尺寸
   const resize = () => {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-  }
-  
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+
   // 绘制示例（星空效果）
   const draw = () => {
     // ctx.fillStyle = 'rgba(0, 0, 0, 0.1)' // 添加透明度实现拖尾效果
     // ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = '#000'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-    
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     // 添加星星示例
-    for(let i = 0; i < 200; i++) {
-      ctx.beginPath()
+    for (let i = 0; i < 200; i++) {
+      ctx.beginPath();
       ctx.arc(
         Math.random() * canvas.width,
         Math.random() * canvas.height,
         Math.random() * 2,
         0,
         Math.PI * 2
-      )
-      ctx.fillStyle = '#fff'
-      ctx.fill()
+      );
+      ctx.fillStyle = "#fff";
+      ctx.fill();
     }
-  }
+  };
 
-  resize()
-  draw()
-  window.addEventListener('resize', resize)
-  
+  resize();
+  draw();
+  window.addEventListener("resize", resize);
+
   // 修改后的生命周期管理
-  let resizeHandler: () => void
+  let resizeHandler: () => void;
 
   onMounted(() => {
-    resizeHandler = () => resize()
-    window.addEventListener('resize', resizeHandler)
-  })
+    resizeHandler = () => resize();
+    window.addEventListener("resize", resizeHandler);
+  });
 
   onBeforeUnmount(() => {
-    window.removeEventListener('resize', resizeHandler)
-  })
-}
+    window.removeEventListener("resize", resizeHandler);
+  });
+};
 
-onMounted(initCanvas)
-
+onMounted(initCanvas);
 </script>
 
 <style scoped>
@@ -160,10 +160,10 @@ onMounted(initCanvas)
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  z-index: 1;  /* 提升内容层级 */
+  z-index: 1; /* 提升内容层级 */
 }
 
-.main{
+.main {
   z-index: 1;
 }
 
@@ -246,9 +246,12 @@ onMounted(initCanvas)
   top: -20px;
 }
 
+.system-icon {
+  font-size: inherit;
+}
 
 /* 页脚 */
-.system-footer{
+.system-footer {
   display: block;
   color: #fff;
   height: 100px;
@@ -257,5 +260,4 @@ onMounted(initCanvas)
 /* .el-link{
   display: block;
 } */
-
 </style>

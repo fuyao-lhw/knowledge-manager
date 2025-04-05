@@ -23,6 +23,11 @@ export default defineConfig({
         // 这一步是将api给替换掉,后端接口跨域不带api,但是前端接口必须要带
         // rewrite: (path) => path.replace(/^\/api/, '')
       }
-    }
+    },
+    // fs: {
+    //   allow: [
+    //     'D:/code/All_Learning/MarkdownNotes/images'
+    //   ],
+    // },
   }
 })

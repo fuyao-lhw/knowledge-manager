@@ -10,9 +10,11 @@ encoding:   -*- coding: utf-8 -*-
 实现步骤
 
 """
+import datetime
+
 from flask import Blueprint, request, jsonify
 from perKnowManage.config import logger, data_save_type, FILE_FOLDER
-from perKnowManage.utils.documents import DocumentList, DocumentsInfo
+from perKnowManage.utils.documents import DocumentList, DocumentsStatsInfo, DocumentDetail
 import os
 
 bp = Blueprint("documents", __name__)
@@ -25,7 +27,7 @@ def documents():
         if "file" not in request.files:
             logger.info("未接收到文件!")
             return jsonify({
-                "status": False,
+                "status": 100,
                 "message": "没有文件"
             })
         file = request.files["file"]
@@ -36,7 +38,7 @@ def documents():
         # file.save(save_path)
         logger.info(f"{file.filename}保存成功!")
         return jsonify({
-            "status": True,
+            "status": 200,
             "message": "上传成功"
         })
 
@@ -55,9 +57,9 @@ def documents():
         elif data_save_type == 1:
             logger.info("从本地文件夹读取数据")
             result = document_list.from_folder()
-        print(result)
+        logger.info(f"documents, {result}")
         return jsonify({
-            "status": True,
+            "status": 200,
             "message": "获取成功",
             "data": result
         })
@@ -67,7 +69,7 @@ def documents():
 def stats():
     if request.method == "GET":
         logger.info("读取数据展示信息")
-        documents_info = DocumentsInfo()
+        documents_info = DocumentsStatsInfo()
         result = []
         # 数据库
         if data_save_type == 0:
@@ -75,9 +77,22 @@ def stats():
         # 本地
         if data_save_type == 1:
             result = documents_info.folder_info()
-
+        logger.info(f"stats, {result}")
         return jsonify({
-            "status": True,
+            "status": 200,
             "message": "获取成功",
             "data": result
+        })
+
+@bp.route("/document/<document_id>", methods=["POST", "GET"])
+def get_documents_details(document_id):
+    if request.method == "GET":
+        logger.info("获取文档的详细信息")
+        document_detail = DocumentDetail(document_id=document_id)
+        result = document_detail.get_document_base_info()
+        logger.info(result)
+        return jsonify({
+            "status": 200,
+            "message": f"文章{document_id}获取成功;时间为:{datetime.datetime.now()}",
+            "data": result,
         })

@@ -11,21 +11,26 @@
           <el-menu-item index="/dashboard">
             <template #title>
               <el-icon><House /></el-icon>
-              <span>知识概览</span>
+              <RouterLink to="/documents/info" class="link"
+                >知识概览</RouterLink
+              >
+              <!-- <span>知识概览</span> -->
             </template>
           </el-menu-item>
-          <el-sub-menu index="2">
+          <!-- <el-sub-menu index="2">
             <template #title>
               <el-icon><Files /></el-icon>
-              <span>知识库管理</span>
+              <span class="link">知识库管理</span>
             </template>
             <el-menu-item index="/knowledge/list">所有知识库</el-menu-item>
-            <!-- <el-menu-item index="/knowledge/new">新建知识库</el-menu-item> -->
-          </el-sub-menu>
+            <el-menu-item index="/knowledge/new">新建知识库</el-menu-item>
+          </el-sub-menu> -->
           <el-menu-item index="/recent">
             <template #title>
-              <el-icon><Clock /></el-icon>
-              <span>所有文档</span>
+              <el-icon><List /></el-icon>
+              <!-- <span>所有文档</span> -->
+              <RouterLink to="/documents/list" class="link">所有文档</RouterLink>
+              <!-- <span>所有文档</span> -->
             </template>
           </el-menu-item>
         </el-menu>
@@ -33,38 +38,7 @@
 
       <!-- 主内容区 -->
       <el-main class="main-content">
-        <div class="stats-container">
-          <el-row :gutter="20">
-            <el-col :span="6" v-for="(stat, index) in statsData" :key="index">
-              <el-card shadow="hover">
-                <el-statistic
-                  :title="stat.title"
-                  :value="stat.value"
-                  :precision="stat.precision || 0"
-                />
-              </el-card>
-            </el-col>
-          </el-row>
-        </div>
-
-        <!-- 最近更新 -->
-        <el-card class="recent-updates">
-          <template #header>
-            <div class="card-header">
-              <span>最近更新</span>
-            </div>
-          </template>
-          <el-timeline>
-            <el-timeline-item
-              v-for="(update, index) in updates"
-              :key="index"
-              :timestamp="update.time"
-            >
-              {{ update.title }}
-            </el-timeline-item>
-          </el-timeline>
-        </el-card>
-
+        <RouterView></RouterView>
         <!-- <el-button @click="get_document_list">请求文档</el-button> -->
       </el-main>
     </el-container>
@@ -72,48 +46,10 @@
 </template>
 
 <script lang="ts" setup>
+// import "@/components/User/UserSetting.vue";
+import "@/components/Documents/Info.vue";
 import { onMounted, ref } from "vue";
-import { House, Files, Clock } from "@element-plus/icons-vue";
-import "@/components/User/UserInfo.vue";
-import axios from "axios";
-
-const navVisible = ref(false);
-
-const toggleNav = () => {
-  navVisible.value = !navVisible.value;
-  document.querySelector(".navigator").classList.toggle("active");
-};
-const searchKey = ref("");
-
-
-
-
-// Python,HTML,CSS,JacaScript,Java,Vue,C#,开发
-const statsData = ref([]);
-
-async function get_stats() {
-  const response = await axios.get("/api/stats");
-  console.log("数据展示", response.data)
-  statsData.value = response.data.data;
-}
-
-const updates = ref([]);
-
-async function get_document_list() {
-  const response = await axios.get("/api/documents?form=latest");
-  console.log("最近更新" ,response.data);
-  for (let i=0; i<response.data.data.length; i++){
-    updates.value.push({
-      title: response.data.data[i].name.split(".")[0],
-      time: response.data.data[i].upload_time,
-    });
-  }
-}
-
-onMounted(()=>{
-  get_stats();
-  get_document_list();
-})
+import { RouterLink, RouterView } from "vue-router";
 
 </script>
 
@@ -214,6 +150,13 @@ onMounted(()=>{
   width: 200px;
   background: #1a1a1a;
   overflow-y: auto;
+  
+}
+
+.navigator .link {
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
 }
 
 /* 主内容区 */

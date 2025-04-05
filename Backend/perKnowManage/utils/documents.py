@@ -11,6 +11,9 @@ encoding:   -*- coding: utf-8 -*-
 
 """
 from datetime import datetime, timedelta
+import mistune
+import markdown
+import re
 from perKnowManage.Models.models import Documents, Tags, Users
 import os
 from perKnowManage.config import FILE_FOLDER
@@ -28,19 +31,21 @@ class DocumentList:
 
     # 从数据库获取
     def from_db(self):
-
+        documents = None
         if self.form == "latest":
             documents = Documents.query.order_by(Documents.upload_time.desc()).limit(5).all()
-            result = [
-                {
-                    "title": d.title,  # 文档标题
-                    "upload_time": "d.uplpad_time",  # 上传时间
-                    "user_id": d.user_id,  # 用户id
-                } for d in documents
-            ]
-            return result
+
         elif self.form == "all":
-            print("暂未开放")
+            documents = Documents.query.order_by(Documents.upload_time.desc()).all()
+        result = [
+            {
+                "name": d.title.split('.')[0],  # 文档标题
+                "upload_time": self._convert_gmt_time(d.upload_time),  # 上传时间
+                "user_id": d.user_id,  # 用户id
+                "document_id": d.id,  # 文档id
+            } for d in documents
+        ]
+        return result
 
     def from_folder(self):
         file_list = os.listdir(FILE_FOLDER)
@@ -70,8 +75,22 @@ class DocumentList:
         elif self.form == "all":
             print("暂未开放")
 
+    def _convert_gmt_time(self, dt_str):
+        """将 GMT 时间字符串转为标准格式"""
+        from datetime import datetime
+        try:
+            # 解析原始格式
+            dt_obj = datetime.strptime(dt_str, '%a, %d %b %Y %H:%M:%S GMT')
+            # 转为目标格式
+            return dt_obj.strftime('%Y-%m-%d %H:%M:%S')
+        except (TypeError, ValueError):
+            # 如果已经是 datetime 对象直接格式化
+            if isinstance(dt_str, datetime):
+                return dt_str.strftime('%Y-%m-%d %H:%M:%S')
+            return dt_str  # 保底返回原始数据
 
-class DocumentsInfo:
+
+class DocumentsStatsInfo:
     def __init__(self):
         self.knowledge_counts = 0  # 知识库总量
         self.tags_counts = 0  # 查询标签表的所有内容-->文档库总数
@@ -111,7 +130,7 @@ class DocumentsInfo:
         # 本周新增
         self.week_new_counts = self._weekly_new_count()
         # 文档上传成员
-        self.upload_user_counts = Documents.query.with_entities(func.count(distinct(Documents.user_id)))
+        self.upload_user_counts = Documents.query.with_entities(func.count(distinct(Documents.user_id))).scalar()
 
         result = [
             {"title": "知识库库总数", "value": self.knowledge_counts},
@@ -162,4 +181,45 @@ class DocumentsInfo:
         ]
 
         print("folder", result)
+        return result
+
+
+class DocumentDetail:
+    def __init__(self, document_id):
+        self.document_id = document_id
+
+    def _query_document_base_info(self):
+        """查询文档路径"""
+        document = Documents.query.filter_by(id=self.document_id).first()
+        result = {
+            "title": document.title,
+            "file_path": document.file_path,
+        }
+        return result
+
+    def get_document_content(self):
+        result = self._query_document_base_info()
+        file_path = result["file_path"]
+        with open(file_path, "r", encoding="utf-8")as f:
+            content = f.read()
+
+        html = content
+        # if ".md" in file_path:
+        #     # 证明是md文件
+        #     html = mistune.markdown(content)
+
+        return html
+
+    def _link_to_url(self, content):
+        image_regex = "!(\[\S+\])\(\S+\)"
+        result = content.replace("images", "D:\code\All_Learning\MarkdownNotes\images")
+        return result
+
+
+    def get_document_base_info(self):
+        """获取文档基本信息"""
+        content = self.get_document_content()
+        result = self._query_document_base_info()
+        result["content"] = content
+
         return result

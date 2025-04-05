@@ -24,7 +24,18 @@ const router = createRouter({
         },
         {
             path: '/index',
-            component: () => import('@/pages/IndexPage.vue')
+            component: () => import('@/pages/IndexPage.vue'),
+            redirect: '/documents/info',
+            children: [
+                {
+                    path: '/documents/info',
+                    component: () => import('@/components/Documents/Info.vue')
+                },
+                {
+                    path: '/documents/list',
+                    component: () => import('@/components/Documents/List.vue')
+                },
+            ]
         },
         {
             path: '/personal',
@@ -34,7 +45,11 @@ const router = createRouter({
             path: '/test',
             component: () => import('@/pages/TestPage.vue')
         },
+        {
+            path: '/document/:document_id',
+            // component: () => import('@/pages/DocumentDetailPage.vue')
+            component: () => import('@/components/Documents/Detail.vue')
+        },
     ]
 })
-
 export default router
