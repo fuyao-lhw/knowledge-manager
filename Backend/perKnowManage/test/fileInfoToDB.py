@@ -13,7 +13,6 @@ encoding:   -*- coding: utf-8 -*-
 from perKnowManage.config import db
 from perKnowManage.Models.models import Documents
 from perKnowManage.test.getFileContent import *
-import markdown
 from datetime import datetime
 
 

@@ -11,7 +11,6 @@ encoding:   -*- coding: utf-8 -*-
 
 """
 import datetime
-
 from flask import Blueprint, request, jsonify
 from perKnowManage.config import logger, data_save_type, FILE_FOLDER
 from perKnowManage.utils.documents import (
