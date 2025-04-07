@@ -37,31 +37,13 @@
       />
     </p> -->
     </el-card>
-    <el-card title="上传文件">
-      <template #header>上传文件</template>
-      <p class="one">
-        <el-upload
-          accept="md,txt,html"
-          action="/api/documents"
-          method="POST"
-          :auto-upload="false"
-        >
-          <template #tip>
-            <div class="el-upload__tip">
-              暂时只支持.md/.txt/.html文件;大小不超过5mb
-            </div>
-          </template>
-          <el-button type="primary" :icon="Plus">上传知识文件</el-button>
-        </el-upload>
-      </p>
-    </el-card>
+
   </div>
 </template>
 
 <!-- 交互,脚本语言 -->
 <script lang="ts" setup name="PersonalCenterPage">
 import { reactive, ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
 import axios from "axios";
 
 const username = localStorage.getItem("user");

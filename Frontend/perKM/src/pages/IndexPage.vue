@@ -14,23 +14,18 @@
               <RouterLink to="/documents/info" class="link"
                 >知识概览</RouterLink
               >
-              <!-- <span>知识概览</span> -->
             </template>
           </el-menu-item>
-          <!-- <el-sub-menu index="2">
-            <template #title>
-              <el-icon><Files /></el-icon>
-              <span class="link">知识库管理</span>
-            </template>
-            <el-menu-item index="/knowledge/list">所有知识库</el-menu-item>
-            <el-menu-item index="/knowledge/new">新建知识库</el-menu-item>
-          </el-sub-menu> -->
           <el-menu-item index="/recent">
             <template #title>
               <el-icon><List /></el-icon>
-              <!-- <span>所有文档</span> -->
               <RouterLink to="/documents/list" class="link">所有文档</RouterLink>
-              <!-- <span>所有文档</span> -->
+            </template>
+          </el-menu-item>
+          <el-menu-item>
+            <template #title>
+              <el-icon><DocumentAdd /></el-icon>
+              <RouterLink to="/documents/upload" class="link">上传文档</RouterLink>
             </template>
           </el-menu-item>
         </el-menu>

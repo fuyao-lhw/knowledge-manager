@@ -100,6 +100,7 @@ const initCanvas = () => {
   const resize = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    draw();
   };
 
   // 绘制示例（星空效果）

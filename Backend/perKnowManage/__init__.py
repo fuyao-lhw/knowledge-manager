@@ -13,7 +13,7 @@ encoding:   -*- coding: utf-8 -*-
 from flask import Flask
 from perKnowManage.config import db
 from flask_cors import CORS
-from perKnowManage.test.fileInfoToDB import run_content_to_db
+
 
 
 
@@ -35,11 +35,11 @@ def create_app():
     url_prefix = "/api"
 
     # 登录注册功能
-    from perKnowManage.Apis import identity
+    from Apis import identity
     app.register_blueprint(blueprint=identity.bp, url_prefix=url_prefix)
 
     # 文档功能
-    from perKnowManage.Apis import documents
+    from Apis import documents
     app.register_blueprint(blueprint=documents.bp, url_prefix=url_prefix)
 
     return app

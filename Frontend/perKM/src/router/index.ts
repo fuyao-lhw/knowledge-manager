@@ -35,6 +35,10 @@ const router = createRouter({
                     path: '/documents/list',
                     component: () => import('@/components/Documents/List.vue')
                 },
+                {
+                    path: '/documents/upload',
+                    component: () => import('@/components/Documents/Upload.vue')
+                },
             ]
         },
         {

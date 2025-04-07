@@ -11,16 +11,16 @@ encoding:   -*- coding: utf-8 -*-
 
 """
 from datetime import datetime, timedelta
-import mistune
-import markdown
-import re
-from perKnowManage.Models.models import Documents, Tags, Users
+from perKnowManage.Models.models import Documents, Tags
+from perKnowManage.config import db
 import os
 from perKnowManage.config import FILE_FOLDER
 from sqlalchemy import func, distinct
 
 
 class DocumentList:
+    """获取全部文档"""
+
     def __init__(self, form):
         """
         从数据库-文档表 获取数据
@@ -91,6 +91,8 @@ class DocumentList:
 
 
 class DocumentsStatsInfo:
+    """获取文档基本信息,用于前端展示总数等信息"""
+
     def __init__(self):
         self.knowledge_counts = 0  # 知识库总量
         self.tags_counts = 0  # 查询标签表的所有内容-->文档库总数
@@ -185,22 +187,25 @@ class DocumentsStatsInfo:
 
 
 class DocumentDetail:
+    """获取文档内容,用于前端文档展示"""
+
     def __init__(self, document_id):
         self.document_id = document_id
+        self.result = {}
 
     def _query_document_base_info(self):
         """查询文档路径"""
         document = Documents.query.filter_by(id=self.document_id).first()
-        result = {
+        self.result = {
             "title": document.title,
             "file_path": document.file_path,
         }
-        return result
+        return self.result
 
     def get_document_content(self):
-        result = self._query_document_base_info()
-        file_path = result["file_path"]
-        with open(file_path, "r", encoding="utf-8")as f:
+        # result = self._query_document_base_info()
+        file_path = self.result["file_path"]
+        with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
         html = content
@@ -215,11 +220,29 @@ class DocumentDetail:
         result = content.replace("images", "D:\code\All_Learning\MarkdownNotes\images")
         return result
 
-
     def get_document_base_info(self):
         """获取文档基本信息"""
-        content = self.get_document_content()
         result = self._query_document_base_info()
+        content = self.get_document_content()
         result["content"] = content
 
         return result
+
+
+class DocumentToMySQL:
+    """
+    将文档数据存入数据库,文件存储在file_path,
+    将user_id,title,file_path,file_type,upload_time存入MySQL数据库
+    """
+
+    def __init__(self):
+        pass
+
+    def save_to_mysql(self, title, file_path, file_type, user_id,
+                      upload_time=datetime.now()):
+        new_document = Documents(title=title, file_path=file_path,
+                                 file_type=file_type, user_id=user_id,
+                                 upload_time=upload_time)  # 录入数据
+
+        db.session.add(new_document)  # 新增数据
+        db.session.commit()  # 提交数据
