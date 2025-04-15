@@ -40,17 +40,34 @@
 import axios from "axios";
 import { onMounted, ref } from "vue";
 
-const navVisible = ref(false);
+// const navVisible = ref(false);
 
-const toggleNav = () => {
-  navVisible.value = !navVisible.value;
-  document.querySelector(".navigator").classList.toggle("active");
-};
+// const toggleNav = () => {
+//   navVisible.value = !navVisible.value;
+//   document.querySelector(".navigator").classList.toggle("active");
+// };
 // 搜索的关键字
 const searchKey = ref("");
 
 // Python,HTML,CSS,JacaScript,Java,Vue,C#,开发
-const statsData = ref([]);
+// 新增类型定义
+interface StatItem {
+  title: string;
+  value: number | string;
+  precision?: number;
+}
+
+const statsData = ref<StatItem[]>([]); // 指定泛型类型
+
+// async function get_stats() {
+//   const response = await axios.get("/api/stats");
+//   // 数据转换确保类型正确
+//   statsData.value = response.data.data.map(item => ({
+//     title: item.title,
+//     value: item.value,
+//     precision: item.precision
+//   }));
+// }
 
 // 获取统计数据
 async function get_stats() {
@@ -59,7 +76,15 @@ async function get_stats() {
   statsData.value = response.data.data;
 }
 
-const updates = ref([]);
+// 在<script setup>中新增接口定义
+interface UpdateItem {
+  title: string;
+  time: string;
+  document_id: number | string; // 根据实际类型调整
+}
+
+// 修改updates定义
+const updates = ref<UpdateItem[]>([]); // 显式指定泛型类型
 
 // 获取最近更新
 async function get_document_list() {

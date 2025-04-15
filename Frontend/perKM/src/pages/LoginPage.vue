@@ -33,11 +33,10 @@
 
 <!-- 交互,脚本语言 -->
 <script lang="ts" name="LoginPage" setup>
-import identity from "@/hooks/identity.ts";
+import identity from "@/hooks/identity";
 import { reactive } from "vue";
-import router from "@/router/index.ts";
 
-const { postLogin } = identity("login");
+const { postLogin } = identity();
 
 const data = reactive({
   email: "",

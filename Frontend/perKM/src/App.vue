@@ -89,6 +89,14 @@ const searchKey = ref("");
 
 const canvasRef = ref<HTMLCanvasElement>();
 
+// 新增导航状态管理
+const navVisible = ref(true);
+
+// 新增导航切换方法
+const toggleNav = () => {
+  navVisible.value = !navVisible.value;
+};
+
 // Canvas初始化
 const initCanvas = () => {
   const canvas = canvasRef.value!;

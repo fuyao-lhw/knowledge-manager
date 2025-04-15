@@ -28,9 +28,10 @@ class Documents(db.Model):
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text)
     file_path = db.Column(db.String(500), nullable=False)
-    file_type = db.Column(db.String(10), nullable=False)
+    file_tag = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     upload_time = db.Column(db.DateTime, default=db.func.current_timestamp())
+    update_time = db.Column(db.DateTime, default=db.func.current_timestamp())
     __table_args__ = (
         db.Index('ft_content', 'title', 'content', mysql_prefix='FULLTEXT'),
     )
@@ -41,7 +42,7 @@ class Tags(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    created_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user = db.relationship('Users', backref=db.backref('tags', lazy=True))
 
 

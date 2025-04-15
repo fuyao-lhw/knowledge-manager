@@ -22,7 +22,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 
 
-const cvs = document.getElementById('stroke');
+const cvs = document.getElementById('stroke') as HTMLCanvasElement;
 function init(){
     cvs.width = window.innerWidth;
     cvs.height = window.innerHeight;

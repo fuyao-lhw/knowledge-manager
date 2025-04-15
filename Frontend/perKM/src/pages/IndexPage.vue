@@ -12,7 +12,7 @@
             <template #title>
               <el-icon><House /></el-icon>
               <RouterLink to="/documents/info" class="link"
-                >知识概览</RouterLink
+                >系统概览</RouterLink
               >
             </template>
           </el-menu-item>
@@ -26,6 +26,12 @@
             <template #title>
               <el-icon><DocumentAdd /></el-icon>
               <RouterLink to="/documents/upload" class="link">上传文档</RouterLink>
+            </template>
+          </el-menu-item>
+          <el-menu-item>
+            <template #title>
+              <el-icon><Edit /></el-icon>
+              <RouterLink to="/documents/edit" class="link">文档修改</RouterLink>
             </template>
           </el-menu-item>
         </el-menu>

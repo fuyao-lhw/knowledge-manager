@@ -3,7 +3,7 @@ encoding:   -*- coding: utf-8 -*-
 @Time           :  2025/3/8 17:31
 @Project_Name   :  PerKnowManage
 @Author         :  lhw
-@File_Name      :  documents.py
+@File_Name      :  documentsMapper.py
 
 功能描述
 
@@ -11,11 +11,12 @@ encoding:   -*- coding: utf-8 -*-
 
 """
 from datetime import datetime, timedelta
-from perKnowManage.Models.models import Documents, Tags
-from perKnowManage.config import db
+from perKnowManage.pojo.models import Documents, Tags, document_tags
+from perKnowManage.config import db, logger
 import os
 from perKnowManage.config import FILE_FOLDER
 from sqlalchemy import func, distinct
+from perKnowManage.mapper.tagMapper import select_tag_id_by_tag
 
 
 class DocumentList:
@@ -238,11 +239,32 @@ class DocumentToMySQL:
     def __init__(self):
         pass
 
-    def save_to_mysql(self, title, file_path, file_type, user_id,
-                      upload_time=datetime.now()):
+    def save_to_documents(
+            self, title, file_path, file_type, user_id,
+            upload_time=datetime.now()
+            ):
         new_document = Documents(title=title, file_path=file_path,
                                  file_type=file_type, user_id=user_id,
                                  upload_time=upload_time)  # 录入数据
 
         db.session.add(new_document)  # 新增数据
         db.session.commit()  # 提交数据
+
+        return new_document.id
+
+    def save_to_documents_tags(self, document_id, tags):
+        for tag in tags:
+            tag_id = select_tag_id_by_tag(tag)
+            new_dt = document_tags(document_id=document_id, tag_id=tag_id)
+            db.session.add(new_dt)
+            db.session.commit()
+            logger.info(f"标签id{tag_id}:文档id{document_id},添加成功!")
+
+    def save_to_tags(self, tags, user_id):
+        tags_id_list = []
+        for tag in tags:
+            new_tag = Tags(name=tag, user_id=user_id)
+            db.session.add(new_tag)
+            db.session.commit()
+            tags_id_list.append(new_tag.id)
+            logger.info(f"{new_tag.id}:{tag}添加成功!")

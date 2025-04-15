@@ -26,8 +26,8 @@ const startJourney = () => {
   router.push("/index");
 };
 
-const welcomeWord = ref(null);
-const intervalId = ref(null);
+const welcomeWord = ref("");
+const intervalId = ref();
 
 onMounted(() => {
   intervalId.value = setInterval(() => {

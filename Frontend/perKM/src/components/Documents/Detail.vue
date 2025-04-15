@@ -33,7 +33,7 @@
   const route = useRoute();
   
   async function get_document_detail() {
-    const response = await axios.get("/api/document/" + route.params.document_id);
+    const response = await axios.get("/api/documents/" + route.params.document_id);
     console.log("文档详细展示", response.data);
     const md = new MarkDownIt();
     if (response.data.status == 200) {

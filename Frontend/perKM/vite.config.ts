@@ -10,6 +10,24 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // 自定义 chunk 分割规则（例如按文件类型分离）
+        manualChunks: {
+          vue: ['vue', 'vue-router'],
+          // utils: ['@/utils'],
+        },
+        // 静态资源输出到子目录
+        assetFileNames: (assetInfo) => {
+          const name = assetInfo.name || ''
+          if (name.endsWith('.css')) return 'css/[name].[hash].[ext]'
+          if (name.endsWith('.png')) return 'images/[name].[hash].[ext]'
+          return 'js/[name].[hash].[ext]'
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

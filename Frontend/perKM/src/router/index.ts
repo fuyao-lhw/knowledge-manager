@@ -39,15 +39,15 @@ const router = createRouter({
                     path: '/documents/upload',
                     component: () => import('@/components/Documents/Upload.vue')
                 },
+                {
+                    path: '/documents/edit',
+                    component: () => import('@/components/Documents/Edit.vue')
+                },
             ]
         },
         {
             path: '/personal',
             component: () => import('@/pages/PersonalCenterPage.vue')
-        },
-        {
-            path: '/test',
-            component: () => import('@/pages/TestPage.vue')
         },
         {
             path: '/document/:document_id',
