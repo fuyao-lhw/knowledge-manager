@@ -16,22 +16,42 @@
               >
             </template>
           </el-menu-item>
-          <el-menu-item index="/recent">
+          <el-sub-menu>
             <template #title>
-              <el-icon><List /></el-icon>
-              <RouterLink to="/documents/list" class="link">所有文档</RouterLink>
+              <el-icon><View /></el-icon>
+              <span class="link">文档展示</span>
             </template>
-          </el-menu-item>
+            <el-menu-item index="/all_doc">
+              <template #title>
+                <el-icon><List /></el-icon>
+                <RouterLink to="/documents/list" class="link"
+                  >所有文档</RouterLink
+                >
+              </template>
+            </el-menu-item>
+            <el-menu-item index="/all_tag">
+              <template #title>
+                <el-icon><CollectionTag /></el-icon>
+                <RouterLink to="/documents/tags" class="link"
+                  >所有标签</RouterLink
+                >
+              </template>
+            </el-menu-item>
+          </el-sub-menu>
           <el-menu-item>
             <template #title>
               <el-icon><DocumentAdd /></el-icon>
-              <RouterLink to="/documents/upload" class="link">上传文档</RouterLink>
+              <RouterLink to="/documents/upload" class="link"
+                >上传文档</RouterLink
+              >
             </template>
           </el-menu-item>
           <el-menu-item>
             <template #title>
               <el-icon><Edit /></el-icon>
-              <RouterLink to="/documents/edit" class="link">文档修改</RouterLink>
+              <RouterLink to="/documents/edit" class="link"
+                >文档修改</RouterLink
+              >
             </template>
           </el-menu-item>
         </el-menu>
@@ -51,7 +71,6 @@
 import "@/components/Documents/Info.vue";
 import { onMounted, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
-
 </script>
 
 <style scoped>
@@ -151,7 +170,6 @@ import { RouterLink, RouterView } from "vue-router";
   width: 200px;
   background: #1a1a1a;
   overflow-y: auto;
-  
 }
 
 .navigator .link {

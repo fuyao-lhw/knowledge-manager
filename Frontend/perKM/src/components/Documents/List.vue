@@ -7,6 +7,7 @@
                 <el-link class="link" :underline="false" :href="'/document/'+row.document_id">{{ row.name }}</el-link>
             </template>
         </el-table-column>
+        <el-table-column prop="tags" label="标签" width="180" />
         <el-table-column prop="upload_time" label="发布时间" width="180" />
         <el-table-column prop="document_id" label="文章id" width="180" />
     </el-table>

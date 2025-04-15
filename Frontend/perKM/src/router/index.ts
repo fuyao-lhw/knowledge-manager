@@ -43,6 +43,10 @@ const router = createRouter({
                     path: '/documents/edit',
                     component: () => import('@/components/Documents/Edit.vue')
                 },
+                {
+                    path: '/documents/tags',
+                    component: () => import('@/components/Documents/Tags.vue')
+                },
             ]
         },
         {
