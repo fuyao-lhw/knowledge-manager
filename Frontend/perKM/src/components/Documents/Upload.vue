@@ -13,7 +13,8 @@
         ref="uploadFiles"
         @change="fileHandleChange"
         :show-file-list="false"
-        :on-success="removeFiles"
+        :success="removeFiles"
+        :before-upload="beforeUpload"
       >
         <template #trigger
           ><el-button type="primary" :icon="Plus" class="btn"
@@ -67,21 +68,10 @@
 <!-- 交互,脚本语言 -->
 <script lang="ts" setup name="Upload">
 import { Plus, Upload } from "@element-plus/icons-vue";
-import type { UploadInstance, UploadRawFile } from "element-plus";
 import { computed, ref } from "vue";
 import type { FileWithTags } from "@/interface/FileWithTags";
-import { ta } from "element-plus/es/locale";
 import axios from "axios";
 
-// 获取用户名
-const username = localStorage.getItem("user");
-// 获取标签
-const tags = ref([]);
-
-// 点击上传的文件-输出文件名
-const preview = function (file: File) {
-  console.log(file);
-};
 
 // 添加isEditing状态
 const files = ref<File[]>([]);
@@ -138,19 +128,22 @@ const uploadData = computed(() => ({
     }))
   ),
 }));
-// 将携带参数规范化
-// const formatUploadData = function () {
-//   uploadData.value.fileInfos = selectedFiles.value.map(file => ({
-//     fileName: file.file.name,
-//     fileSize: file.file.size,
-//     tags: file.tags // 每个文件的标签
-//   }))
-// };
+
+// 限制文件大小为 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; 
+// 上传文件之前的钩子
+const beforeUpload = (file) => {
+  if (file.size > MAX_FILE_SIZE) {
+    console.error(`文件 ${file.name} 大小超过 5MB，无法上传`);
+    return false;
+  }
+  return true;
+};
+
 
 // 提交文件
 // 新增自定义上传方法
 const submitFile = async () => {
-
 
   // 1. 收集所有文件
   const filesToUpload = files.value; // 当前选中的所有文件

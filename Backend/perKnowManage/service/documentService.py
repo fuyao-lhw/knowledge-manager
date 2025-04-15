@@ -25,14 +25,21 @@ def upload_document_service(username, fileInfos, fileList):
     fileInfosDict = json.loads(fileInfos)  # 解析元数据
     logger.info(f"元数据: {fileInfosDict}")
 
+    # 文件个数
+    fileNumber = len(fileInfosDict)
+
     # 创建对象
     dtm = DocumentToMySQL()
 
     # 用户id:
     user_id = select_user_id_by_username(username)
 
+    # 失败的文档
+    errorFileList = []
+
     # 遍历文件信息
-    for i in range(len(fileInfosDict)):
+    for i in range(fileNumber):
+
         # 文档操作
         fileInfo = fileInfosDict[i]  # 文档信息
         fileName = fileInfo["fileName"]  # 文档名字
@@ -42,24 +49,33 @@ def upload_document_service(username, fileInfos, fileList):
         file = fileList[i]  # 文档
         # fileContent = file.read().decode("utf-8")  # 文档内容
         fileSavePath = os.path.join(FILE_FOLDER, fileName)  # 文档保存路径
-        # file.save(fileSavePath)  # 文档保存
-        logger.info(f"用户名: {username}; 用户id: {user_id}")
-        logger.info(f"文档保存成功: {fileSavePath}")
+        try:
+            # file.save(fileSavePath)  # 文档保存
+            logger.info(f"用户名: {username}; 用户id: {user_id}")
+            logger.info(f"文档保存成功: {fileSavePath}")
 
-        # 入库-documents
-        logger.info(f"将文档数据写入documents表")
-        logger.info(f"标题:{fileName},路径:{fileSavePath},类型:{fileTags},用户:{user_id}")
-        # document_id = dtm.save_to_documents(fileName, fileSavePath, fileTags, user_id)  # 添加
-        logger.info("数据添加成功!")
+            # 入库-documents
+            logger.info(f"将文档数据写入documents表")
+            logger.info(f"标题:{fileName},路径:{fileSavePath},类型:{fileTags},用户:{user_id}")
+            # document_id = dtm.save_to_documents(fileName, fileSavePath, fileTags, user_id)  # 添加
+            logger.info("数据添加成功!")
 
-        # 入表-tags
-        logger.info(f"将标签列表数据写入标签表")
-        logger.info(f"文件名: {fileName}; 文档标签: {fileTags};")
-        # tags_id_list = dtm.save_to_tags(fileTags, user_id)  # 添加
-        #
-        # # 入表-documents_tags
-        logger.info(f"将文档id和标签id一一对应")
-        # # dtm.save_to_documents_tags(document_id, fileTags)
+            # 入表-tags
+            logger.info(f"将标签列表数据写入标签表")
+            logger.info(f"文件名: {fileName}; 文档标签: {fileTags};")
+            # tags_id_list = dtm.save_to_tags(fileTags, user_id)  # 添加
+            #
+            # # 入表-documents_tags
+            logger.info(f"将文档id和标签id一一对应")
+            # # dtm.save_to_documents_tags(document_id, fileTags)
+        except Exception as e:
+            logger.error(f"文件上传服务出错,第{i}个文件: {e}")
+            errorFileList.append(fileInfo)
+
+    errorNumber = len(errorFileList)  # 失败个数
+    return Result(msg=f"成功: {fileNumber - errorNumber}个; 失败: {errorNumber}个",
+                  data={"失败文件": errorFileList}
+                  ).success()
 
 
 def get_document_list_service(form):

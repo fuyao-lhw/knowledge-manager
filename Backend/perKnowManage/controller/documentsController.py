@@ -33,43 +33,7 @@ def documents():
         fileInfos = data.get("fileInfos")  # 文档信息
         fileList = request.files.getlist("files")  # 获取文件列表
 
-        upload_document_service(username, fileInfos, fileList)
-
-
-        # # file_content = file.read().decode("utf-8")  # 文件内容
-        # # print(file_content)  # 读取文件内容
-        # filename = file.filename  # 文件名
-        # save_path = os.path.join(FILE_FOLDER, filename)  # 保存的路径
-        # # file.save(save_path)
-        # logger.info(f"发送者: {username}; 文件保存至: {save_path}")
-        # logger.info(f"{file.filename}保存成功!")
-        #
-        # dtm = DocumentToMySQL()  # 创建对象
-        #
-        # # 入库-documents
-        # logger.info(f"将文档数据写入documents表")
-        # title = filename.title()  # 文档标题
-        # file_path = save_path  # 文件路径
-        # file_type = title.split('.')[-1]  # 文件类型
-        # user_id = select_user_id_by_username(username)  # 上传用户
-        # logger.info(f"标题:{title},路径:{file_path},类型:{file_type},用户:{user_id}")
-        # # document_id = dtm.save_to_documents(title, file_path, file_type, user_id)  # 添加
-        # logger.info("数据添加成功!")
-        #
-        # # 入表-tags
-        # logger.info(f"将标签列表数据写入标签表")
-        # tags = list(eval(tags if tags else filename.split(".")[-1]))  # 将字符串转为列表
-        # logger.info(f"文件名: {filename}; 文档标签: {tags}; 类型: {type(tags)}")
-        # # tags_id_list = dtm.save_to_tags(tags, user_id)  # 添加
-        #
-        # # 入表-documents_tags
-        # logger.info(f"将文档id和标签id一一对应")
-        # # dtm.save_to_documents_tags(document_id, tags_id_list)
-
-        return jsonify({
-            "status": 200,
-            "message": "上传成功"
-        })
+        return upload_document_service(username, fileInfos, fileList)
 
 
 # 获取文档列表
