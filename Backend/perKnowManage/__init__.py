@@ -35,11 +35,15 @@ def create_app():
     url_prefix = "/api"
 
     # 登录注册功能
-    from controller import identityController
+    from perKnowManage.controller import identityController
     app.register_blueprint(blueprint=identityController.bp, url_prefix=url_prefix)
 
     # 文档功能
-    from controller import documentsController
+    from perKnowManage.controller import documentsController
     app.register_blueprint(blueprint=documentsController.bp, url_prefix=url_prefix)
+
+    # 标签
+    from perKnowManage.controller import  tagsController
+    app.register_blueprint(blueprint=tagsController.bp, url_prefix=url_prefix)
 
     return app

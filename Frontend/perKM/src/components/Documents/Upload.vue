@@ -55,8 +55,12 @@
   <el-dialog v-model="tagFormDialogBollean">
     <template #title>编辑标签</template>
     <el-form :model="selectedFiles[editingIndex].tags">
-      <el-form-item label="输入标签(以英文逗号分割多个标签)">
+      <el-form-item label="输入标签">
         <el-input v-model="selectedFiles[editingIndex].tags" />
+        <el-text type="warning">
+          输入多个标签,以英文逗号分割<br>
+          未创建的标签会自动创建
+        </el-text>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveTags">保存</el-button>
@@ -134,7 +138,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 // 上传文件之前的钩子
 const beforeUpload = (file) => {
   if (file.size > MAX_FILE_SIZE) {
-    console.error(`文件 ${file.name} 大小超过 5MB，无法上传`);
+    alert(`文件 ${file.name} 大小超过 5MB，无法上传`);
     return false;
   }
   return true;

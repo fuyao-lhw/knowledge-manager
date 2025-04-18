@@ -11,7 +11,7 @@ encoding:   -*- coding: utf-8 -*-
 
 """
 from perKnowManage.config import db
-from perKnowManage.Models.models import Documents
+from perKnowManage.pojo.models import Documents
 from perKnowManage.test.getFileContent import *
 from datetime import datetime
 
@@ -21,9 +21,10 @@ file_list = get_file_list()
 print(file_list)
 
 
-def content_to_db(title, file_path, file_type, user_id, upload_time):
+def content_to_db(title, file_path, file_tag, user_id, upload_time):
     new_documents = Documents(title=title, file_path=file_path,
-                              file_type=file_type, user_id=user_id, upload_time=upload_time)
+                              file_tag=file_tag, user_id=user_id, upload_time=upload_time,
+                              update_time=upload_time)
 
     db.session.add(new_documents)
     db.session.commit()
@@ -36,7 +37,7 @@ def run_content_to_db():
         # print(title)
         md_content = get_file_content(file_path)  # 读取内容
         # html = markdown.markdown(md_content)  # md转html
-        content_to_db(file, file_path, "html", 3, datetime.now())
+        content_to_db(file, file_path, file_path.split('.')[-1], 3, datetime.now())
 
 
 # 在 fileInfoToDB.py 底部添加

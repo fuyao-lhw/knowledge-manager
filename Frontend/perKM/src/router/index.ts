@@ -44,8 +44,16 @@ const router = createRouter({
                     component: () => import('@/components/Documents/Edit.vue')
                 },
                 {
-                    path: '/documents/tags',
-                    component: () => import('@/components/Documents/Tags.vue')
+                    path: '/tags/list',
+                    component: () => import('@/components/Tags/List.vue'),
+                },
+                {
+                    path: '/tags/:tag_id',
+                    component: () => import('@/components/Tags/Detail.vue')
+                },
+                {
+                    path: '/tags/edit',
+                    component: () => import('@/components/Tags/Edit.vue')
                 },
             ]
         },
@@ -58,6 +66,13 @@ const router = createRouter({
             // component: () => import('@/pages/DocumentDetailPage.vue')
             component: () => import('@/components/Documents/Detail.vue')
         },
+        {
+            path: '/tags',
+            children: [
+
+            ]
+        },
+        
     ]
 })
 export default router

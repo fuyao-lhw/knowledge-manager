@@ -10,11 +10,9 @@ encoding:   -*- coding: utf-8 -*-
 实现步骤
 
 """
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from perKnowManage.config import logger, db
-from perKnowManage.pojo.models import Users
 import datetime
-import time
 from perKnowManage.service.identityService import (
     login_service, register_service, login_state_service, trans_pwd_service,
     verify_code_service

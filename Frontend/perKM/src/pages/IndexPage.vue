@@ -16,12 +16,12 @@
               >
             </template>
           </el-menu-item>
-          <el-sub-menu>
+          <el-sub-menu index="documents">
             <template #title>
-              <el-icon><View /></el-icon>
-              <span class="link">文档展示</span>
+              <el-icon><Document /></el-icon>
+              <span class="link">文档模块</span>
             </template>
-            <el-menu-item index="/all_doc">
+            <el-menu-item index="/documents/list">
               <template #title>
                 <el-icon><List /></el-icon>
                 <RouterLink to="/documents/list" class="link"
@@ -29,31 +29,41 @@
                 >
               </template>
             </el-menu-item>
-            <el-menu-item index="/all_tag">
+            <el-menu-item index="/documents/upload">
               <template #title>
-                <el-icon><CollectionTag /></el-icon>
-                <RouterLink to="/documents/tags" class="link"
-                  >所有标签</RouterLink
+                <el-icon><DocumentAdd /></el-icon>
+                <RouterLink to="/documents/upload" class="link"
+                  >上传文档</RouterLink
+                >
+              </template>
+            </el-menu-item>
+            <el-menu-item index="/documents/edit">
+              <template #title>
+                <el-icon><Edit /></el-icon>
+                <RouterLink to="/documents/edit" class="link"
+                  >文档修改</RouterLink
                 >
               </template>
             </el-menu-item>
           </el-sub-menu>
-          <el-menu-item>
+          <el-sub-menu index="/tags">
             <template #title>
-              <el-icon><DocumentAdd /></el-icon>
-              <RouterLink to="/documents/upload" class="link"
-                >上传文档</RouterLink
-              >
+              <el-icon><Collection /></el-icon>
+              <span class="link">标签模块</span>
             </template>
-          </el-menu-item>
-          <el-menu-item>
-            <template #title>
-              <el-icon><Edit /></el-icon>
-              <RouterLink to="/documents/edit" class="link"
-                >文档修改</RouterLink
-              >
-            </template>
-          </el-menu-item>
+            <el-menu-item index="/tags/list">
+              <template #title>
+                <el-icon><CollectionTag /></el-icon>
+                <RouterLink to="/tags/list" class="link">所有标签</RouterLink>
+              </template>
+            </el-menu-item>
+            <el-menu-item index="/tags/setting">
+              <template #title>
+                <el-icon><Setting /></el-icon>
+                <RouterLink to="/tags/edit" class="link">标签管理</RouterLink>
+              </template>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
 

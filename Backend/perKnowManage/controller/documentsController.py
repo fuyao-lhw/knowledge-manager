@@ -10,12 +10,11 @@ encoding:   -*- coding: utf-8 -*-
 实现步骤
 
 """
-import datetime
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from perKnowManage.config import logger
 from perKnowManage.service.documentService import (
     get_document_list_service, get_document_detail, get_stats_service,
-    upload_document_service
+    upload_document_service, update_document_service
 )
 
 bp = Blueprint("documents", __name__)
@@ -51,6 +50,7 @@ def get_document_list():
 @bp.route("/documents/<document_id>", methods=["PUT"])
 def update_documents(document_id):
     logger.info(f"文档更新接口: {document_id}")
+    return update_document_service(document_id)
 
 
 # 获取文档详细内容

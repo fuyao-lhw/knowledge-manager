@@ -16,7 +16,7 @@ from perKnowManage.config import db, logger
 import os
 from perKnowManage.config import FILE_FOLDER
 from sqlalchemy import func, distinct
-from perKnowManage.mapper.tagMapper import select_tag_id_by_tag
+from perKnowManage.mapper.tagsMapper import select_tag_id_by_tag
 
 
 class DocumentList:
@@ -44,6 +44,7 @@ class DocumentList:
                 "upload_time": self._convert_gmt_time(d.upload_time),  # 上传时间
                 "user_id": d.user_id,  # 用户id
                 "document_id": d.id,  # 文档id
+                "tags": d.file_tag,  # 文档标签
             } for d in documents
         ]
         return result
@@ -230,41 +231,31 @@ class DocumentDetail:
         return result
 
 
-class DocumentToMySQL:
-    """
-    将文档数据存入数据库,文件存储在file_path,
-    将user_id,title,file_path,file_type,upload_time存入MySQL数据库
-    """
+# 根据文档名查询文档id
+def select_document_id_by_name(title):
+    """根据文档名查询文档id"""
+    document = Documents.query.filter_by(title=title).first()
 
-    def __init__(self):
-        pass
+    return document.id
 
-    def save_to_documents(
-            self, title, file_path, file_type, user_id,
-            upload_time=datetime.now()
-            ):
-        new_document = Documents(title=title, file_path=file_path,
-                                 file_type=file_type, user_id=user_id,
-                                 upload_time=upload_time)  # 录入数据
 
-        db.session.add(new_document)  # 新增数据
-        db.session.commit()  # 提交数据
+def add_document(title, file_path, file_tag, user_id, upload_time, update_time):
+    """添加文档"""
+    new_document = Documents(title=title, file_path=file_path, file_tag=file_tag,
+                             user_id=user_id, upload_time=upload_time,
+                             update_time=update_time)
 
-        return new_document.id
+    return new_document.id
 
-    def save_to_documents_tags(self, document_id, tags):
-        for tag in tags:
-            tag_id = select_tag_id_by_tag(tag)
-            new_dt = document_tags(document_id=document_id, tag_id=tag_id)
-            db.session.add(new_dt)
-            db.session.commit()
-            logger.info(f"标签id{tag_id}:文档id{document_id},添加成功!")
 
-    def save_to_tags(self, tags, user_id):
-        tags_id_list = []
-        for tag in tags:
-            new_tag = Tags(name=tag, user_id=user_id)
-            db.session.add(new_tag)
-            db.session.commit()
-            tags_id_list.append(new_tag.id)
-            logger.info(f"{new_tag.id}:{tag}添加成功!")
+def update_document(document_id, update_time):
+    """更新文档信息"""
+    document = Documents.query.filter_by(id=document_id).first()
+    document.update_time = update_time
+
+    return document.id
+
+def select_document_by_id(document_id):
+    """根据文档id获取文档"""
+    document = Documents.query.filter_by(id=document_id).all()
+    return document
