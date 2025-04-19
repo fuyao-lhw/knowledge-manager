@@ -77,6 +77,7 @@ import type { FileWithTags } from "@/interface/FileWithTags";
 import axios from "axios";
 
 
+
 // 添加isEditing状态
 const files = ref<File[]>([]);
 const selectedFiles = ref<FileWithTags[]>([]);
@@ -136,7 +137,7 @@ const uploadData = computed(() => ({
 // 限制文件大小为 5MB
 const MAX_FILE_SIZE = 5 * 1024 * 1024; 
 // 上传文件之前的钩子
-const beforeUpload = (file) => {
+const beforeUpload = (file: File) => {
   if (file.size > MAX_FILE_SIZE) {
     alert(`文件 ${file.name} 大小超过 5MB，无法上传`);
     return false;
@@ -159,7 +160,7 @@ const submitFile = async () => {
   formData.append("fileInfos", uploadData.value.fileInfos); // JSON 字符串
 
   // 添加文件到 FormData
-  filesToUpload.forEach((file) => {
+  filesToUpload.forEach((file: any) => {
     console.log(file);
     formData.append("files", file.raw);
   });

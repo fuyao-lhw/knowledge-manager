@@ -16,7 +16,7 @@ import os
 from perKnowManage.config import logger, data_save_type, FILE_FOLDER
 from perKnowManage.mapper.documentsMapper import (
     DocumentList, DocumentsStatsInfo, DocumentDetail, select_document_id_by_name,
-    add_document, update_document
+    add_document, update_document, delete_document
 
 )
 from perKnowManage.mapper.identityMapper import select_user_id_by_username
@@ -126,10 +126,42 @@ def get_document_list_service(form):
     return Result(msg="获取成功", data=result).success()
 
 
-def update_document_service(document_id):
+def update_document_service(documents):
     """更新文档服务"""
-    update_document(document_id, update_time=datetime.datetime.now())
-    return Result(msg="更新成功", data={"document_id": document_id})
+    errorList = []
+    successList = []
+    for document in documents:
+        try:
+            document["update_time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            new = update_document(document)
+            successList.append({"id": new.id, "title": new.title, "file_tag": new.file_tag})
+        except Exception as e:
+            logger.error(f"出现错误{document['id']}: {e}")
+            errorList.append(document)
+
+    return Result(msg=f"更新成功:{len(successList)};更新失败:{len(errorList)}", data={
+        "errorList": errorList,
+        "successList": successList
+    }).success()
+
+
+def delete_documents_service(documents):
+    """删除文档的服务"""
+    errorList = []
+    successList = []
+    for document in documents:
+        try:
+            document_id = document["id"]  # id
+            if delete_document(document_id):
+                successList.append(document)
+        except Exception as e:
+            logger.error(f"文档{document['id']}发生错误: {e}")
+            errorList.append(document)
+    return Result(msg=f"删除成功:{len(successList)};删除失败:{len(errorList)}",
+                  data={
+                      "errorList": errorList,
+                      "successList": successList
+                  }).success()
 
 
 def get_document_detail(document_id):

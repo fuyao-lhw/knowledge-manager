@@ -40,8 +40,13 @@ const router = createRouter({
                     component: () => import('@/components/Documents/Upload.vue')
                 },
                 {
-                    path: '/documents/edit',
-                    component: () => import('@/components/Documents/Edit.vue')
+                    path: '/documents/setting',
+                    component: () => import('@/components/Documents/Setting.vue')
+                },
+                {
+                    path: '/document/:document_id',
+                    // component: () => import('@/pages/DocumentDetailPage.vue')
+                    component: () => import('@/components/Documents/Detail.vue')
                 },
                 {
                     path: '/tags/list',
@@ -52,19 +57,14 @@ const router = createRouter({
                     component: () => import('@/components/Tags/Detail.vue')
                 },
                 {
-                    path: '/tags/edit',
-                    component: () => import('@/components/Tags/Edit.vue')
+                    path: '/tags/setting',
+                    component: () => import('@/components/Tags/Setting.vue')
                 },
             ]
         },
         {
             path: '/personal',
             component: () => import('@/pages/PersonalCenterPage.vue')
-        },
-        {
-            path: '/document/:document_id',
-            // component: () => import('@/pages/DocumentDetailPage.vue')
-            component: () => import('@/components/Documents/Detail.vue')
         },
         {
             path: '/tags',

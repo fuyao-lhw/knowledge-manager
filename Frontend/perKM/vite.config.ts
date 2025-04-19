@@ -10,20 +10,23 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  base: "/",  // 配置文件的根目录为相对路径
+  assetsInclude: ['**/*.md'],
+
   build: {
+    assetsDir: 'assets',  // 配置静态资源目录
     rollupOptions: {
       output: {
-        // 自定义 chunk 分割规则（例如按文件类型分离）
-        manualChunks: {
-          vue: ['vue', 'vue-router'],
-          // utils: ['@/utils'],
-        },
-        // 静态资源输出到子目录
+        // 配置静态资源打包
+        chunkFileNames: 'js/[name]-[hash].ts',
+        entryFileNames: 'js/[name]-[hash].ts',
+
+        // 配置CSS静态资源打包
         assetFileNames: (assetInfo) => {
-          const name = assetInfo.name || ''
-          if (name.endsWith('.css')) return 'css/[name].[hash].[ext]'
-          if (name.endsWith('.png')) return 'images/[name].[hash].[ext]'
-          return 'js/[name].[hash].[ext]'
+          if (assetInfo.name === 'style.css') {
+            return 'css/[name]-[hash].css';
+          }
+          return 'css/[name]-[hash].[ext]';
         },
       },
     },

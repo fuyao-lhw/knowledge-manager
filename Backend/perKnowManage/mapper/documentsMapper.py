@@ -17,6 +17,7 @@ import os
 from perKnowManage.config import FILE_FOLDER
 from sqlalchemy import func, distinct
 from perKnowManage.mapper.tagsMapper import select_tag_id_by_tag
+from perKnowManage.utils.updateModelByDict import update_model_by_dict
 
 
 class DocumentList:
@@ -40,11 +41,11 @@ class DocumentList:
             documents = Documents.query.order_by(Documents.upload_time.desc()).all()
         result = [
             {
-                "name": d.title.split('.')[0],  # 文档标题
+                "title": d.title.split('.')[0],  # 文档标题
                 "upload_time": self._convert_gmt_time(d.upload_time),  # 上传时间
                 "user_id": d.user_id,  # 用户id
-                "document_id": d.id,  # 文档id
-                "tags": d.file_tag,  # 文档标签
+                "id": d.id,  # 文档id
+                "file_tag": d.file_tag,  # 文档标签
             } for d in documents
         ]
         return result
@@ -61,7 +62,7 @@ class DocumentList:
                 stat_info = os.stat(file_path)
 
                 file_info.append({
-                    "name": filename,  # 文件名
+                    "title": filename,  # 文件名
                     "size": f"{round(stat_info.st_size / 1024, 2)} KB",  # 转换为KB单位
                     "upload_time": datetime.fromtimestamp(stat_info.st_mtime).strftime('%Y-%m-%d %H:%M:%S')  # 格式化修改时间
                 })
@@ -248,14 +249,32 @@ def add_document(title, file_path, file_tag, user_id, upload_time, update_time):
     return new_document.id
 
 
-def update_document(document_id, update_time):
+def update_document(document):
     """更新文档信息"""
-    document = Documents.query.filter_by(id=document_id).first()
-    document.update_time = update_time
+    document_id = document["id"]
+    old_document = select_document_by_id(document_id)
+    old_document.title = document["title"]
+    old_document.file_tag = document["file_tag"]
+    old_document.update_time = document["update_time"]
+    db.session.commit()
+    new_document = select_document_by_id(document_id)
+    logger.info(f"原数据: {old_document.file_tag}; 新数据: {new_document.file_tag}")
+    return new_document
 
-    return document.id
 
 def select_document_by_id(document_id):
     """根据文档id获取文档"""
-    document = Documents.query.filter_by(id=document_id).all()
+    document = Documents.query.filter_by(id=document_id).first()
     return document
+
+
+def select_all_document():
+    """获取文档表的所有数据"""
+    return Documents.query.all()
+
+def delete_document(document_id):
+    """根据id删除文档"""
+    document = Documents.query.filter_by(id=document_id)
+    document.delete()  # 删除
+    db.session.commit()
+    return True

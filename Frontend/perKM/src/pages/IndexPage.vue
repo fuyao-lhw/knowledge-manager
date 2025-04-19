@@ -37,11 +37,11 @@
                 >
               </template>
             </el-menu-item>
-            <el-menu-item index="/documents/edit">
+            <el-menu-item index="/documents/setting">
               <template #title>
-                <el-icon><Edit /></el-icon>
-                <RouterLink to="/documents/edit" class="link"
-                  >文档修改</RouterLink
+                <el-icon><Setting /></el-icon>
+                <RouterLink to="/documents/setting" class="link"
+                  >文档管理</RouterLink
                 >
               </template>
             </el-menu-item>
@@ -60,7 +60,7 @@
             <el-menu-item index="/tags/setting">
               <template #title>
                 <el-icon><Setting /></el-icon>
-                <RouterLink to="/tags/edit" class="link">标签管理</RouterLink>
+                <RouterLink to="/tags/setting" class="link">标签管理</RouterLink>
               </template>
             </el-menu-item>
           </el-sub-menu>

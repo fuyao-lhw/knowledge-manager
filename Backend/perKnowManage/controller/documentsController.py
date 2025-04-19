@@ -14,7 +14,7 @@ from flask import Blueprint, request
 from perKnowManage.config import logger
 from perKnowManage.service.documentService import (
     get_document_list_service, get_document_detail, get_stats_service,
-    upload_document_service, update_document_service
+    upload_document_service, update_document_service, delete_documents_service
 )
 
 bp = Blueprint("documents", __name__)
@@ -47,10 +47,23 @@ def get_document_list():
 
 
 # 更新文档
-@bp.route("/documents/<document_id>", methods=["PUT"])
-def update_documents(document_id):
-    logger.info(f"文档更新接口: {document_id}")
-    return update_document_service(document_id)
+@bp.route("/documents", methods=["PUT"])
+def update_documents():
+    logger.info(f"文档更新接口")
+    data = request.get_json()
+    logger.info(data)
+    documents = data["documentList"]
+    return update_document_service(documents)
+
+
+# 批量删除文档
+@bp.route("/documents", methods=["DELETE"])
+def delete_documents():
+    logger.info(f"文档删除接口")
+    data = request.get_json()
+    logger.info(data)
+    documents = data["documentList"]
+    return delete_documents_service(documents)
 
 
 # 获取文档详细内容
