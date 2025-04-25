@@ -64,6 +64,18 @@
               </template>
             </el-menu-item>
           </el-sub-menu>
+          <el-sub-menu index="/knowledge">
+            <template #title>
+              <el-icon><Notification /></el-icon>
+              <span class="link">知识关联</span>
+            </template>
+            <el-menu-item index="/knowledge/graph">
+              <template #title>
+                <el-icon><Notebook /></el-icon>
+                <RouterLink :to="'/knowledge/graph'" class="link">知识图谱</RouterLink>
+              </template>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </el-aside>
 
@@ -81,6 +93,7 @@
 import "@/components/Documents/Info.vue";
 import { onMounted, ref } from "vue";
 import { RouterLink, RouterView } from "vue-router";
+
 </script>
 
 <style scoped>

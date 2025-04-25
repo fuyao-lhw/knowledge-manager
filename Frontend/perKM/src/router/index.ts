@@ -60,6 +60,14 @@ const router = createRouter({
                     path: '/tags/setting',
                     component: () => import('@/components/Tags/Setting.vue')
                 },
+                {
+                    path: '/search/result',
+                    component: () => import('@/components/Search/Result.vue')
+                },
+                {
+                    path: '/knowledge/graph',
+                    component: () => import('@/components/Knowledge/Graph.vue')
+                },
             ]
         },
         {

@@ -16,7 +16,7 @@ from perKnowManage.pojo.models import document_tags
 
 def select_documentId_by_tagId(tag_id):
     """根据标签id查询文档id"""
-    dts = db.session.query(document_tags).filter_by(tag_id=tag_id)
+    dts = db.session.query(document_tags).filter_by(tag_id=tag_id).first()
     return dts.document_id
 
 

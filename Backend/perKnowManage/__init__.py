@@ -43,7 +43,15 @@ def create_app():
     app.register_blueprint(blueprint=documentsController.bp, url_prefix=url_prefix)
 
     # 标签
-    from perKnowManage.controller import  tagsController
+    from perKnowManage.controller import tagsController
     app.register_blueprint(blueprint=tagsController.bp, url_prefix=url_prefix)
+
+    # 搜索
+    from perKnowManage.controller import searchController
+    app.register_blueprint(blueprint=searchController.bp, url_prefix=url_prefix)
+
+    # 图
+    from perKnowManage.controller import graphController
+    app.register_blueprint(blueprint=graphController.bp, url_prefix=url_prefix)
 
     return app

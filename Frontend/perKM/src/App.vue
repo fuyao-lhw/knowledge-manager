@@ -11,7 +11,7 @@
       </el-icon>
       <div class="header-content">
         <!-- 左侧系统名称 -->
-        <el-link :underline="false" class="logo" type="primary" href="/index">
+        <el-link :underline="false" style="color: white;" class="logo" type="primary" href="/index">
           <span class="system-name">
             <el-icon class="system-icon"><Promotion /></el-icon
             >扶摇知识管理系统</span
@@ -28,6 +28,9 @@
           >
             <template #prefix>
               <el-icon><Search /></el-icon>
+            </template>
+            <template #suffix>
+              <el-button type="primary" @click="submitSearch">搜索</el-button>
             </template>
           </el-input>
         </div>
@@ -84,8 +87,24 @@
 import { Search } from "@element-plus/icons-vue";
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import UserSetting from "./components/User/UserSetting.vue";
+import axios from "axios";
+import { useRouter } from "vue-router";
 
 const searchKey = ref("");
+
+const router = useRouter();
+
+// 搜索方法
+const submitSearch = async () => {
+  console.log("搜索内容：", searchKey.value);
+
+  router.push({
+    path: "/search/result",
+    query: {
+      keyword: searchKey.value,
+    },
+  });
+};
 
 const canvasRef = ref<HTMLCanvasElement>();
 

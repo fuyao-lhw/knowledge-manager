@@ -6,7 +6,7 @@
         <template #default="scope">
           <RouterLink
             class="link"
-            :to="'/document/' + scope.row.document_id"
+            :to="'/document/' + scope.row.id"
             >{{ scope.row.title }}</RouterLink
           >
         </template>

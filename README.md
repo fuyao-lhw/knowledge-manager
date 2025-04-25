@@ -7,7 +7,7 @@
 - 基础文档管理
 - 标签系统
 - 全文搜索
-- 知识图谱（考虑？）
+- 知识图谱
 
 ## 技术架构
 
@@ -56,7 +56,7 @@ CREATE TABLE documents (
     title VARCHAR(200) NOT NULL,
     content TEXT,
     file_path VARCHAR(500) NOT NULL,  -- 文件存储路径
-    file_type VARCHAR(10) NOT NULL,   -- pdf/docx/txt等
+    file_tag VARCHAR(10) NOT NULL,   -- pdf/docx/txt等
     user_id INT NOT NULL,
     upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FULLTEXT INDEX ft_content (title, content),
@@ -85,14 +85,14 @@ CREATE TABLE documents (
 CREATE TABLE tags (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
-    created_by INT NOT NULL,
-    FOREIGN KEY (created_by) REFERENCES users(id)
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 ```
 
 - **id**：主键，唯一标识标签，自增整数。
 - **name**：标签名称（如 `技术`、`会议记录`），同一用户不可重复且不可为空。
-- **created_by**：外键关联 `users.id`，标识标签的创建者，实现多用户标签隔离。
+- **user_id**：外键关联 `users.id`，标识标签的创建者，实现多用户标签隔离。
 
 **索引与外键**：
 
@@ -174,156 +174,7 @@ CREATE TABLE relationships (
 - **FOREIGN KEY (target_id)**：确保目标实体有效。
 - **INDEX(source_id, target_id)**：加速查询特定实体间的关系。
 
-## RESTful API设计
-
-| 功能       | 方法 | 路径                      | 参数                            |
-| :--------- | :--- | :------------------------ | :------------------------------ |
-| 文档上传   | POST | /api/documents            | FormData(file)                  |
-| 文档列表   | GET  | /api/documents            | page, per_page, q               |
-| 文档详情   | GET  | /api/documents/<id>       |                                 |
-| 标签列表   | GET  | /api/tags                 | search                          |
-| 登录       | POST | /api/login                | email,password                  |
-| 注册       | POST | /api/register             | email,password,<br />verifycode |
-| 请求验证码 | POST | /api/register/verify_code | email                           |
-| 实体关系   | GET  | /api/kg/relations         | entity_id（可选）               |
-
-## 数据的返回格式
-
-```
-{
-	"status": boolean,
-	"message": string,
-	"data": string/json/dict/int...,  # 非必要
-}
-```
-
-
-
-## 后端设计
-
-为了实现多页面分工设计API,Flask提供了蓝图进行大型项目管理
-
-具体流程:
-
-```mermaid
-graph TD
-	A[各种API] --> |注册| B[蓝图]
-	B[蓝图] --> |注册| C[flask应用]
-```
-
-
-
-### 结构
-
-```
-Backend
-	perKnowManage
-		__init__.py
-		app.py
-		config.py
-		Models
-			models.py
-		Apis
-			identity.py  登录/注册
-			documents.py  文档
-			permission.py  
-			tags.py
-		utils
-```
-
-- **app.py** : 主应用文件(运行文件)
-- **config.py** : 配置文件(数据库配置...)
-- **Models** : 数据库模型文件(关系映射)
-- **Apis** : RESTful API设计
-- **utils**：功能函数
-
-### 设置flask应用
-
-#### 创建应用
-
-在``app.py``中设置应用
-
-#### 控制台设置
-
-- 设置项目为开发模式
-
-```cmd
-set FLASK_APP=perKnowManage
-set FLASK_ENV=dev
-```
-
-> 设置ENV为dev是为了能够在应用代码更改时,能将更新的内容进行同步
-
-- 运行方式
-
-```
-flask run
-```
-
-或直接运行``app.py``
-
-### 数据库映射
-
-为了灵活的实现与数据库的连接,这里使用``flask_sqlalchemy``将MySQL数据库和flask进行抽象的关系映射
-
-> 具体的数据库定义在``models.py``
-
-
-
-## 前端设计
-
-### 结构(src)
-
-```
-src
-	assets
-	components
-	router
-	views(pages)
-	App.vue
-	main.ts
-	
-```
-
-- assets：静态资源
-- components：功能文件
-- router：路由文件
-- pages：页面文件
-- App.vue：主组件
-- main.ts：管理组件注册
-
-### 页面设计
-
-- 欢迎页面：WelcomePage
-- 首页：IndexPage
-- 登录页面：LoginPage
-- 注册页面：RegisterPage
-- 文档详情页面: DocumentPage
-
-
-
-#### 页面关系
-
-![image-20250226235501225](images/README/image-20250226235501225.png)
-
-## 功能实现
-
-### 登录/注册
-
-
+## 接口设计
 
 ### 文档上传
 
-
-
-### 文档列表
-
-
-
-### 全文搜索
-
-
-
-### 知识图谱(?)
-
-考虑中,由于电脑配置和存储问题,neo4j图数据库无法配置,NLP等图神经网络实现困难

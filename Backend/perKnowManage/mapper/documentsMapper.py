@@ -38,11 +38,11 @@ class DocumentList:
             documents = Documents.query.order_by(Documents.upload_time.desc()).limit(5).all()
 
         elif self.form == "all":
-            documents = Documents.query.order_by(Documents.upload_time.desc()).all()
+            documents = Documents.query.order_by(Documents.update_time.desc()).all()
         result = [
             {
                 "title": d.title.split('.')[0],  # 文档标题
-                "upload_time": self._convert_gmt_time(d.upload_time),  # 上传时间
+                "update_time": self._convert_gmt_time(d.update_time),  # 更新时间
                 "user_id": d.user_id,  # 用户id
                 "id": d.id,  # 文档id
                 "file_tag": d.file_tag,  # 文档标签

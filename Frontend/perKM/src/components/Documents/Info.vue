@@ -92,9 +92,9 @@ async function get_document_list() {
   console.log("最近更新", response.data);
   for (let i = 0; i < response.data.data.length; i++) {
     updates.value.push({
-      title: response.data.data[i].name.split(".")[0],
-      time: response.data.data[i].upload_time,
-      document_id: response.data.data[i].document_id,
+      title: response.data.data[i].title.split(".")[0],
+      time: response.data.data[i].update_time ,
+      document_id: response.data.data[i].id,
     });
   }
 }

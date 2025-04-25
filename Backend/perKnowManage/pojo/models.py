@@ -51,28 +51,47 @@ document_tags = db.Table('document_tags',
                          db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
                          )
 
-
+# 实体表
 class Entities(db.Model):
     __tablename__ = 'entities'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.Enum('Person', 'Location', 'Concept', 'Event'), nullable=False)
-    description = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    __table_args__ = (
-        db.Index('idx_name', 'name'),
-    )
+    entity_id = db.Column(db.Integer, primary_key=True)
+    entity_name = db.Column(db.String(255), nullable=False)
+    entity_type = db.Column(db.String(50), nullable=False)
 
 
-class Relationships(db.Model):
-    __tablename__ = 'relationships'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    source_id = db.Column(db.Integer, db.ForeignKey('entities.id'), nullable=False)
-    target_id = db.Column(db.Integer, db.ForeignKey('entities.id'), nullable=False)
-    relation_type = db.Column(db.String(50), nullable=False)
-    weight = db.Column(db.Float, default=1.0)
-    source = db.relationship('Entities', foreign_keys=[source_id], backref=db.backref('outgoing_relationships', lazy=True))
-    target = db.relationship('Entities', foreign_keys=[target_id], backref=db.backref('incoming_relationships', lazy=True))
-    __table_args__ = (
-        db.Index('idx_source_target', 'source_id', 'target_id'),
-    )
+# 关系信息表
+class RelationshipsInfo(db.Model):
+    __tablename__ = 'relationships_info'
+    relationship_id = db.Column(db.Integer, primary_key=True)
+    relationship_name = db.Column(db.String(100), unique=True, nullable=False)
+
+
+# 实体关系表
+class EntityRelationships(db.Model):
+    __tablename__ = 'entity_relationships'
+    entity_relationship_id = db.Column(db.Integer, primary_key=True)
+    entity1_id = db.Column(db.Integer, db.ForeignKey('entities.entity_id', ondelete='CASCADE'))
+    entity2_id = db.Column(db.Integer, db.ForeignKey('entities.entity_id', ondelete='CASCADE'))
+    relationship_id = db.Column(db.Integer, db.ForeignKey('relationships_info.relationship_id', ondelete='CASCADE'))
+    entity1 = db.relationship('Entities', foreign_keys=[entity1_id],
+                              backref=db.backref('outgoing_relationships', cascade='all, delete-orphan'))
+    entity2 = db.relationship('Entities', foreign_keys=[entity2_id],
+                              backref=db.backref('incoming_relationships', cascade='all, delete-orphan'))
+    relationship = db.relationship('RelationshipsInfo',
+                                   backref=db.backref('entity_relationships', cascade='all, delete-orphan'))
+
+# 属性表
+class Attributes(db.Model):
+    __tablename__ = 'attributes'
+    attribute_id = db.Column(db.Integer, primary_key=True)
+    attribute_name = db.Column(db.String(100), nullable=False)
+    attribute_value = db.Column(db.Text)
+    entity_id = db.Column(db.Integer, db.ForeignKey('entities.entity_id', ondelete='CASCADE'))
+    entity = db.relationship('Entities', backref=db.backref('attributes', cascade='all, delete-orphan'))
+
+# 同义词表
+class Synonyms(db.Model):
+    __tablename__ = 'synonyms'
+    synonym_id = db.Column(db.Integer, primary_key=True)
+    main_word = db.Column(db.String(255), nullable=False)
+    synonym_word = db.Column(db.String(255), nullable=False)
