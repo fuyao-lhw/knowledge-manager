@@ -21,6 +21,8 @@ def select_tag_id_by_tag(tag_name):
 
 def select_tag_by_id(tag_id):
     """根据id获取标签"""
+    tag = Tags.query.filter_by(id=tag_id).first()
+    return tag.name
 
 
 def get_all_tags():

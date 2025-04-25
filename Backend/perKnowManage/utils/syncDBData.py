@@ -14,18 +14,44 @@ encoding:   -*- coding: utf-8 -*-
 """
 from perKnowManage.config import db
 from perKnowManage.mapper.documentsMapper import select_all_document
-from perKnowManage.mapper.tagsMapper import select_tag_id_by_tag
+from perKnowManage.mapper.tagsMapper import (
+    select_tag_id_by_tag, add_tag, select_tag_by_id)
 from perKnowManage.service.documents_tagsService import add_did_tid_service
+from perKnowManage.pojo.models import document_tags
+from perKnowManage.mapper.documents_tagsMapper import delete_by_did_tid
 
 
 def sync():
     documents = select_all_document()
     for d in documents:  # 遍历文档
         tags = [d.file_tag] if len(d.file_tag) == 1 else d.file_tag.split(',')
+        print(d.id, tags)
+        delete_surplus_dt(did=d.id, dtags=tags)
         for tag in tags:  # 遍历标签
-            tag_id = select_tag_id_by_tag(tag)
+            global tag_id
+            try:
+                tag_id = select_tag_id_by_tag(tag)
+            except AttributeError:
+                print(f"添加标签: {tag}")
+                add_tag(tag_name=tag, user_id=3)
             print(tag, tag_id, d.id)
             add_did_tid_service(d.id, tag_id)
+
+
+def delete_surplus_dt(did, dtags):
+    """更新文档的标签时,删除多余的标签对应关系"""
+    # dttags - document_tags表的标签; dtags - document表的标签
+    dttag_list = db.session.query(document_tags).filter_by(document_id=did).all()
+    dttags = [select_tag_by_id(d.tag_id) for d in dttag_list]
+    # print(f"dttags: {dttags}; dtags: {dtags}")
+    dttags = set(dttags)
+    dtags = set(dtags)
+    print(f"dttags: {dttags}; dtags: {dtags}")
+    diff = list(dttags - dtags)  # 差集
+    print(f"差集: {diff}")
+    for d in diff:
+        tag_id = select_tag_id_by_tag(d)
+        delete_by_did_tid(did, tag_id)
 
 
 def standalone_run():

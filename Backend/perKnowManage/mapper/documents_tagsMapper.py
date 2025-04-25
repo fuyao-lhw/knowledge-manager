@@ -16,8 +16,8 @@ from perKnowManage.pojo.models import document_tags
 
 def select_documentId_by_tagId(tag_id):
     """根据标签id查询文档id"""
-    dts = db.session.query(document_tags).filter_by(tag_id=tag_id).first()
-    return dts.document_id
+    dts = db.session.query(document_tags).filter_by(tag_id=tag_id).all()
+    return [d.document_id for d in dts]  # 返回该标签对应的所有id,因为可能一个标签对应多个文档
 
 
 def add_did_tid(document_id, tag_id):
@@ -33,3 +33,9 @@ def select_all_documentId_by_tag_id(tag_id):
     dts = db.session.query(document_tags).filter_by(tag_id=tag_id).all()
     # db.session.execute(dts)
     return dts
+
+def delete_by_did_tid(document_id, tag_id):
+    """根据文档id和标签id删除表中的数据"""
+    dts = document_tags.delete().filter_by(document_id=document_id, tag_id=tag_id)
+    db.session.execute(dts)
+    db.session.commit()

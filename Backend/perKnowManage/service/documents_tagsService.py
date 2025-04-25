@@ -20,8 +20,8 @@ def add_did_tid_service(document_id, tag_id):
     """添加document_id和tag_id"""
     # 查询标签id对应的文档id,如果已经存在标签id,就说明已经添加过,不需要在添加
     try:
-        d_id = select_documentId_by_tagId(tag_id)
-        if d_id != document_id:  # 如果两个id不一样,说明没有添加过
+        d_ids = select_documentId_by_tagId(tag_id)
+        if document_id not in d_ids:  # 如果document_id不在查询的标签id对应的文档id的列表内,说明没有添加过
             add_did_tid(document_id, tag_id)
             logger.info(f"文档{document_id}与标签{tag_id}对应成功!")
         else:

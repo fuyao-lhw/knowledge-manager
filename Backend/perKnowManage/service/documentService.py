@@ -24,6 +24,7 @@ from perKnowManage.pojo.result import Result
 from perKnowManage.service.tagsService import add_tag_service
 from perKnowManage.service.documents_tagsService import add_did_tid_service
 from perKnowManage.mapper.tagsMapper import select_tag_id_by_tag
+from perKnowManage.utils.syncDBData import sync
 
 
 def upload_document_service(username, fileInfos, fileList):
@@ -132,9 +133,16 @@ def update_document_service(documents):
     successList = []
     for document in documents:
         try:
+            # 更新document表
             document["update_time"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            # 针对英文进行大小写处理
+            tags = document["file_tag"].split(",")
+            tags = [t[0].upper()+t[1:] if t.isalpha() else t for t in tags]
+            document["file_tag"] = ",".join(tags)  # 拼接
             new = update_document(document)
             successList.append({"id": new.id, "title": new.title, "file_tag": new.file_tag})
+            # 更新文档标签表
+            sync()
         except Exception as e:
             logger.error(f"出现错误{document['id']}: {e}")
             errorList.append(document)

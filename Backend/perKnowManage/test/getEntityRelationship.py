@@ -124,7 +124,7 @@ def run():
         tags = get_all_tags()
         print([tag.name for tag in tags])
         find_related_documents()
-        generate_echarts_data()
+        # generate_echarts_data()
 
 
 if __name__ == '__main__':

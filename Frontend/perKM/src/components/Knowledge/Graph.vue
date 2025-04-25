@@ -34,7 +34,7 @@ onMounted(() => {
   // 力引导布局配置示例
   const option: any = {
     title: {
-      text: "力引导布局示例",
+      text: "文档关系图",
     },
     tooltip: {},
     animationDurationUpdate: 1500, // 动画时长
