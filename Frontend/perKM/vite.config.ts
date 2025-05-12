@@ -1,5 +1,5 @@
 import { fileURLToPath, URL } from 'node:url'
-
+import legacy from '@vitejs/plugin-legacy';
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -9,14 +9,25 @@ export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    legacy({
+      targets: ['defaults', 'not IE 11'],
+      additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
+    }),
   ],
-  base: "/",  // 配置文件的根目录为相对路径
+  base: "",  // 配置文件的根目录为相对路径
   assetsInclude: ['**/*.md'],
 
   build: {
     assetsDir: 'assets',  // 配置静态资源目录
+
+
     rollupOptions: {
       output: {
+        manualChunks: {
+          // 手动拆分代码块（优化分包）
+          vue: ['vue', 'vue-router'],
+          lodash: ['lodash'],
+        },
         // 配置静态资源打包
         chunkFileNames: 'js/[name]-[hash].ts',
         entryFileNames: 'js/[name]-[hash].ts',

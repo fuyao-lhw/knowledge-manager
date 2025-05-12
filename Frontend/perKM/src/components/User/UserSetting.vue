@@ -63,7 +63,8 @@
 
   
   const handleProfile = () => {
-    router.push('/personal')
+    location.href = "/personal"
+    // router.push('/personal')
   }
   
   const handleLogout = () => {

@@ -15,6 +15,8 @@
     "axios": "^1.8.1",
     "echarts": "^5.6.0",
     "element-plus": "^2.9.5",
+    "github-markdown-css": "^5.8.1",
+    "markdown-it": "^14.1.0",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
@@ -23,6 +25,7 @@
     "@tsconfig/node22": "^22.0.0",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.13.4",
+    "@vitejs/plugin-legacy": "^6.1.1",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/eslint-config-typescript": "^14.4.0",
     "@vue/tsconfig": "^0.7.0",

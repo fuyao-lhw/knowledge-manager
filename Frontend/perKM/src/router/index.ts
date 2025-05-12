@@ -1,5 +1,20 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import LoginPage from '@/pages/LoginPage.vue'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router';
+import WelcomePage from '@/pages/WelcomePage.vue';
+import LoginPage from '@/pages/LoginPage.vue';
+import RegisterPage from '@/pages/RegisterPage.vue';
+import IndexPage from '@/pages/IndexPage.vue';
+import DocumentInfo from '@/components/Documents/Info.vue';
+import DocumentList from '@/components/Documents/List.vue';
+import DocumentUpolad from '@/components/Documents/Upload.vue';
+import DocumentSetting from '@/components/Documents/Setting.vue';
+import DocumentDetail from '@/components/Documents/Detail.vue';
+import TagsList from '@/components/Tags/List.vue';
+import TagsDetail from '@/components/Tags/Detail.vue';
+import TagsSetting from '@/components/Tags/Setting.vue';
+import SearchResult from '@/components/Search/Result.vue';
+import KnowledgeGraph from '@/components/Knowledge/Graph.vue';
+
+
 
 
 
@@ -12,7 +27,7 @@ const router = createRouter({
         },
         {
             path: '/welcome',
-            component: () => import('@/pages/WelcomePage.vue')
+            component: WelcomePage
         },
         {
             path: '/login',
@@ -20,53 +35,52 @@ const router = createRouter({
         },
         {
             path: '/register',
-            component: () => import('@/pages/RegisterPage.vue')
+            component: RegisterPage
         },
         {
             path: '/index',
-            component: () => import('@/pages/IndexPage.vue'),
+            component: IndexPage,
             redirect: '/documents/info',
             children: [
                 {
                     path: '/documents/info',
-                    component: () => import('@/components/Documents/Info.vue')
+                    component: DocumentInfo
                 },
                 {
                     path: '/documents/list',
-                    component: () => import('@/components/Documents/List.vue')
+                    component: DocumentList
                 },
                 {
                     path: '/documents/upload',
-                    component: () => import('@/components/Documents/Upload.vue')
+                    component: DocumentUpolad
                 },
                 {
                     path: '/documents/setting',
-                    component: () => import('@/components/Documents/Setting.vue')
+                    component: DocumentSetting
                 },
                 {
                     path: '/document/:document_id',
-                    // component: () => import('@/pages/DocumentDetailPage.vue')
-                    component: () => import('@/components/Documents/Detail.vue')
+                    component: DocumentDetail
                 },
                 {
                     path: '/tags/list',
-                    component: () => import('@/components/Tags/List.vue'),
+                    component: TagsList
                 },
                 {
                     path: '/tags/:tag_id',
-                    component: () => import('@/components/Tags/Detail.vue')
+                    component: TagsDetail
                 },
                 {
                     path: '/tags/setting',
-                    component: () => import('@/components/Tags/Setting.vue')
+                    component: TagsSetting
                 },
                 {
                     path: '/search/result',
-                    component: () => import('@/components/Search/Result.vue')
+                    component: SearchResult
                 },
                 {
                     path: '/knowledge/graph',
-                    component: () => import('@/components/Knowledge/Graph.vue')
+                    component: KnowledgeGraph
                 },
             ]
         },

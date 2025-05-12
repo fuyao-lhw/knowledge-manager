@@ -26,7 +26,6 @@
 <script lang="ts" name="LoginPage" setup>
 import { reactive, ref } from 'vue'
 import identity from '@/hooks/identity.ts'
-import router from '@/router/index.ts'
 import axios from 'axios'
 
 const data = reactive({
@@ -50,7 +49,7 @@ const post_register = async function(){
   console.log(response);
   if (response.status === 200){
     localStorage.setItem("user", data.email);
-    location.href = "/";
+    location.href = "/"
   } else if (response.status === false){
     alert(response.message);
   }

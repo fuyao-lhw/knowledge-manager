@@ -116,6 +116,8 @@ const toggleNav = () => {
   navVisible.value = !navVisible.value;
 };
 
+
+
 // Canvas初始化
 const initCanvas = () => {
   const canvas = canvasRef.value!;
@@ -168,6 +170,7 @@ const initCanvas = () => {
     window.removeEventListener("resize", resizeHandler);
   });
 };
+
 
 onMounted(initCanvas);
 </script>
